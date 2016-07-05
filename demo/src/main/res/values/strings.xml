@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">OfflineArchitecture</string>
+    <string name="just_web_service">Just web service</string>
+    <string name="loaders_and_job_schedulers">Loaders and Job Schedulers</string>
+    <string name="load_with_repository">Load with repository</string>
+    <string name="demo_selector_title">Select a demo</string>
+    <string name="inet_lost">The internet connection has been lost</string>
+    <string name="web_service_sample">Web service only sample</string>
+    <string name="error_load_comments">There was an error while loading the comments</string>
 </resources>
