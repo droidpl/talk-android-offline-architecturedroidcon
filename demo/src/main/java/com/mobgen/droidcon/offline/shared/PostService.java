@@ -13,6 +13,7 @@ import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface PostService {
@@ -27,29 +28,29 @@ public interface PostService {
 
     @NonNull
     @PUT("/posts")
-    Call<Post> create(@Body @NonNull Post post);
+    Call<Post> create(@NonNull @Body Post post);
 
     @NonNull
     @PUT("/posts")
-    Call<Post> update(@Body @NonNull Post post);
+    Call<Post> update(@NonNull @Body Post post);
 
     @NonNull
-    @DELETE("/posts")
-    Call<Void> delete(Post post);
+    @DELETE("/posts/{id}")
+    Call<Void> deletePost(@Path("id") Integer id);
 
     @NonNull
-    @GET("/comments?postId={postId}")
+    @GET("/comments")
     Call<List<Comment>> comments(@NonNull @Query("postId") Integer postId);
 
     @NonNull
     @POST("/comments")
-    Call<Comment> create(@Body @NonNull Comment comment);
+    Call<Comment> create(@NonNull @Body Comment comment);
 
     @NonNull
     @PUT("/comments")
-    Call<Comment> update(@Body @NonNull Comment comment);
+    Call<Comment> update(@NonNull @Body Comment comment);
 
     @NonNull
-    @DELETE("/comments")
-    Call<Void> delete(Comment comment);
+    @DELETE("/comments/{id}")
+    Call<Void> deleteComment(@NonNull @Path("id") Integer id);
 }

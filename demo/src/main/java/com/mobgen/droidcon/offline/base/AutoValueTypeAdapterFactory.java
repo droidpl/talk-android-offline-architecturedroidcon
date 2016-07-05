@@ -12,7 +12,7 @@ public class AutoValueTypeAdapterFactory implements TypeAdapterFactory {
     public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
         Class<? super T> rawType = type.getRawType();
         AutoGson annotation = rawType.getAnnotation(AutoGson.class);
-        if(annotation == null) {
+        if (annotation == null) {
             return null;
         }
         return (TypeAdapter<T>) gson.getAdapter(annotation.autoClass());

@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 
 public class NetworkMonitor extends BroadcastReceiver {
@@ -15,7 +17,7 @@ public class NetworkMonitor extends BroadcastReceiver {
     }
 
     @NonNull
-    public static NetworkMonitor register(@NonNull Context context, @NonNull ConnectivityListener listener){
+    public static NetworkMonitor register(@NonNull Context context, @NonNull ConnectivityListener listener) {
         NetworkMonitor monitor = new NetworkMonitor(listener);
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
@@ -25,13 +27,16 @@ public class NetworkMonitor extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        boolean connected = !intent.getBooleanExtra("EXTRA_NO_CONNECTIVITY", false);
-        if(mConnectivityListener != null){
-            mConnectivityListener.onConnectionChanged(connected);
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        if (mConnectivityListener != null) {
+            mConnectivityListener.onConnectionChanged(isConnected);
         }
     }
 
-    public void unsubscribe(@NonNull Context context){
+    public void unsubscribe(@NonNull Context context) {
         context.unregisterReceiver(this);
         mConnectivityListener = null;
     }

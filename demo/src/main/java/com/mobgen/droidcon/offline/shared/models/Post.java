@@ -13,31 +13,56 @@ public abstract class Post implements Parcelable {
 
     @Nullable
     public abstract Integer id();
+
     @NonNull
     public abstract String title();
+
     @NonNull
     public abstract String body();
+
     @NonNull
     public abstract Long createdAt();
+
     @Nullable
     public abstract Long updatedAt();
+
     @Nullable
     public abstract Long deletedAt();
+
+    public static Builder builder() {
+        return new AutoValue_Post.Builder();
+    }
+
+    public static Builder builder(@NonNull Post post) {
+        return builder()
+                .id(post.id())
+                .title(post.title())
+                .body(post.body())
+                .createdAt(post.createdAt())
+                .updatedAt(post.updatedAt())
+                .deletedAt(post.deletedAt());
+    }
 
     @AutoValue.Builder
     public static abstract class Builder {
         @NonNull
         public abstract Builder id(@Nullable Integer id);
+
         @NonNull
         public abstract Builder title(@NonNull String title);
+
         @NonNull
         public abstract Builder body(@NonNull String body);
+
         @NonNull
         public abstract Builder createdAt(@NonNull Long createdAt);
+
         @NonNull
         public abstract Builder updatedAt(@Nullable Long updatedAt);
+
         @NonNull
         public abstract Builder deletedAt(@Nullable Long deletedAt);
+
         @NonNull
         public abstract Post build();
     }

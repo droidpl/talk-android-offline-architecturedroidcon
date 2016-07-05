@@ -19,17 +19,17 @@ public class DemoSelectorActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.bt_web_service)
-    public void onWebServiceClick(){
+    public void onWebServiceClick() {
         WebServiceArticleActivity.start(this);
     }
 
     @OnClick(R.id.bt_repository)
-    public void onRepositoryClick(){
+    public void onRepositoryClick() {
 
     }
 
     @OnClick(R.id.bt_loader_job_scheduler)
-    public void onLoadersClick(){
+    public void onLoadersClick() {
 
     }
 }
