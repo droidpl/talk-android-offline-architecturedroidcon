@@ -2,16 +2,16 @@ apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 
 android {
-    compileSdkVersion 24
+    compileSdkVersion 23
     buildToolsVersion "24.0.0"
 
     defaultConfig {
         applicationId "com.mobgen.droidcon.offline"
         minSdkVersion 15
-        targetSdkVersion 24
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
-        buildConfigField "String", "SERVER_URL", "\"http://192.168.16.140:3000\""
+        buildConfigField "String", "SERVER_URL", "\"http://192.168.16.126:3000\""
     }
 
     buildTypes {

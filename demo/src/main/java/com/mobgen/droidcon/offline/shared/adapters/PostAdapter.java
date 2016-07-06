@@ -1,6 +1,5 @@
 package com.mobgen.droidcon.offline.shared.adapters;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -20,12 +19,10 @@ import butterknife.ButterKnife;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
 
-    private Context mContext;
     private List<Post> mPosts;
     private PostListener mCallback;
 
-    public PostAdapter(@NonNull Context context, @Nullable List<Post> posts, PostListener postListener) {
-        mContext = context;
+    public PostAdapter(@Nullable List<Post> posts, PostListener postListener) {
         mPosts = posts;
         mCallback = postListener;
     }
@@ -36,7 +33,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
     @Override
     public PostViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new PostViewHolder(LayoutInflater.from(mContext).inflate(R.layout.adapter_post, parent, false));
+        return new PostViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_post, parent, false));
     }
 
     @Override

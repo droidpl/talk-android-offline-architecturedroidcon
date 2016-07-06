@@ -1,10 +1,22 @@
 <resources>
-    <string name="app_name">OfflineArchitecture</string>
-    <string name="just_web_service">Just web service</string>
-    <string name="loaders_and_job_schedulers">Loaders and Job Schedulers</string>
-    <string name="load_with_repository">Load with repository</string>
-    <string name="demo_selector_title">Select a demo</string>
-    <string name="inet_lost">The internet connection has been lost</string>
-    <string name="web_service_sample">Web service only sample</string>
+    <string name="app_name">Offline Architecture</string>
+    <string name="demo_just_web_service">Just web service</string>
+    <string name="demo_loaders_and_job_schedulers">Loaders and Job Schedulers</string>
+    <string name="demo_load_with_repository">Load with repository</string>
+
+    <string name="title_demo_selector">Select a demo</string>
+    <string name="title_web_service_post_list">Article list (Web service)</string>
+    <string name="title_web_service_post_details">Article details (Web service)</string>
+    <string name="title_create_post">Create new post</string>
+    <string name="title_create_comment">Create new comment</string>
+
+    <string name="error_net_lost">The internet connection has been lost</string>
+    <string name="error_load_posts">There was an error while loading the posts</string>
     <string name="error_load_comments">There was an error while loading the comments</string>
+    <string name="hint_title">Title</string>
+    <string name="hint_body">Body</string>
+    <string name="general_create">Create</string>
+    <string name="general_cancel">Cancel</string>
+    <string name="hint_email">Email</string>
+
 </resources>

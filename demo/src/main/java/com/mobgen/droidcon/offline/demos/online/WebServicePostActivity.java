@@ -13,7 +13,7 @@ import com.mobgen.droidcon.offline.base.DemosApplication;
 import com.mobgen.droidcon.offline.shared.PostService;
 import com.mobgen.droidcon.offline.shared.adapters.PostAdapter;
 import com.mobgen.droidcon.offline.shared.models.Post;
-import com.mobgen.droidcon.offline.shared.ui.BaseArticleActivity;
+import com.mobgen.droidcon.offline.shared.ui.BasePostActivity;
 
 import java.util.Date;
 import java.util.List;
@@ -22,21 +22,21 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class WebServiceArticleActivity extends BaseArticleActivity {
+public class WebServicePostActivity extends BasePostActivity implements PostAdapter.PostListener {
 
     private PostService mPostService;
     private PostAdapter mAdapter;
-    private Call<List<Post>> mOnGoingCall;
     private Call<Void> mDeletedCall;
 
     public static void start(@NonNull Context context) {
-        Intent intent = new Intent(context, WebServiceArticleActivity.class);
+        Intent intent = new Intent(context, WebServicePostActivity.class);
         context.startActivity(intent);
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(getString(R.string.title_web_service_post_list));
         mPostService = DemosApplication.instance()
                 .client()
                 .create(PostService.class);
@@ -45,31 +45,28 @@ public class WebServiceArticleActivity extends BaseArticleActivity {
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        reloadArticles();
+        reloadPosts();
     }
 
     @Override
     public void onRefresh() {
-        reloadArticles();
+        reloadPosts();
     }
 
-    private void reloadArticles() {
-        mOnGoingCall = mPostService.posts();
+    private void reloadPosts() {
         startLoading();
-        mOnGoingCall.enqueue(new Callback<List<Post>>() {
+        mPostService.posts().enqueue(new Callback<List<Post>>() {
             @Override
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
-                mAdapter = new PostAdapter(WebServiceArticleActivity.this, response.body(), WebServiceArticleActivity.this);
+                mAdapter = new PostAdapter(response.body(), WebServicePostActivity.this);
                 setAdapter(mAdapter);
                 stopLoading();
-                mOnGoingCall = null;
             }
 
             @Override
             public void onFailure(Call<List<Post>> call, Throwable t) {
-                Snackbar.make(getWindow().getDecorView(), getString(R.string.error_load_comments), Snackbar.LENGTH_LONG).show();
+                Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_load_comments), Snackbar.LENGTH_LONG).show();
                 stopLoading();
-                mOnGoingCall = null;
             }
         });
     }
@@ -90,14 +87,16 @@ public class WebServiceArticleActivity extends BaseArticleActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        reloadArticles();
+                        mAdapter.posts().remove(position);
+                        mAdapter.notifyItemRemoved(position);
+                        reloadPosts();
                     }
                 }, 2000);
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Snackbar.make(getWindow().getDecorView(), getString(R.string.error_load_comments), Snackbar.LENGTH_LONG).show();
+                Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_load_posts), Snackbar.LENGTH_LONG).show();
                 stopLoading();
                 mDeletedCall = null;
             }
@@ -105,13 +104,26 @@ public class WebServiceArticleActivity extends BaseArticleActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mOnGoingCall != null) {
-            mOnGoingCall.cancel();
-        }
-        if (mDeletedCall != null) {
-            mDeletedCall.cancel();
-        }
+    public void onSelected(@NonNull Post post) {
+        //Post clicked go to next screen
+        WebServicePostDetailsActivity.start(this, post);
+    }
+
+    @Override
+    public void onPostCreated(@NonNull Post post) {
+        startLoading();
+        mPostService.create(post).enqueue(new Callback<Post>() {
+            @Override
+            public void onResponse(Call<Post> call, Response<Post> response) {
+                reloadPosts();
+                stopLoading();
+            }
+
+            @Override
+            public void onFailure(Call<Post> call, Throwable t) {
+                Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_load_posts), Snackbar.LENGTH_LONG).show();
+                stopLoading();
+            }
+        });
     }
 }

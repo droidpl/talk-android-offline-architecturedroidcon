@@ -56,7 +56,7 @@ public abstract class Comment {
     public static abstract class Builder {
 
         @NonNull
-        public abstract Builder postId(@NonNull Integer postId);
+        public abstract Builder postId(Integer postId);
 
         @NonNull
         public abstract Builder id(@Nullable Integer id);

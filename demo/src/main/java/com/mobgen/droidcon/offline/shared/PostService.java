@@ -27,7 +27,7 @@ public interface PostService {
     Call<Post> post(@NonNull @Query("id") Integer id);
 
     @NonNull
-    @PUT("/posts")
+    @POST("/posts")
     Call<Post> create(@NonNull @Body Post post);
 
     @NonNull
@@ -40,7 +40,7 @@ public interface PostService {
 
     @NonNull
     @GET("/comments")
-    Call<List<Comment>> comments(@NonNull @Query("postId") Integer postId);
+    Call<List<Comment>> comments(@Query("postId") Integer postId);
 
     @NonNull
     @POST("/comments")
@@ -52,5 +52,5 @@ public interface PostService {
 
     @NonNull
     @DELETE("/comments/{id}")
-    Call<Void> deleteComment(@NonNull @Path("id") Integer id);
+    Call<Void> deleteComment(@Path("id") Integer id);
 }

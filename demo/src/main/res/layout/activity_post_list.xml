@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:orientation="vertical"
-    tools:context=".demos.online.WebServiceArticleActivity">
+    tools:context=".demos.online.WebServicePostActivity">
 
     <LinearLayout
         android:id="@+id/ll_offline"
@@ -20,7 +20,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/inet_lost"
+            android:text="@string/error_net_lost"
             android:textColor="@color/colorAccent" />
     </LinearLayout>
 
@@ -43,7 +43,7 @@
         </android.support.v4.widget.SwipeRefreshLayout>
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/add_new_post"
+            android:id="@+id/fab_add_new_post"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

@@ -3,6 +3,7 @@ package com.mobgen.droidcon.offline.shared.ui;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -11,15 +12,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.mobgen.droidcon.offline.R;
-import com.mobgen.droidcon.offline.demos.online.WebServiceCommentActivity;
+import com.mobgen.droidcon.offline.demos.online.NewPostDialogFragment;
 import com.mobgen.droidcon.offline.shared.adapters.PostAdapter;
-import com.mobgen.droidcon.offline.shared.models.Post;
 import com.mobgen.droidcon.offline.shared.utils.NetworkMonitor;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public abstract class BaseArticleActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, PostAdapter.PostListener, NetworkMonitor.ConnectivityListener {
+public abstract class BasePostActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, NetworkMonitor.ConnectivityListener, View.OnClickListener, NewPostDialogFragment.NewPostListener {
+
+    private static final String DIALOG_CREATE_TAG = "create_post_dialog";
 
     private NetworkMonitor mNetworkMonitor;
 
@@ -29,12 +31,13 @@ public abstract class BaseArticleActivity extends AppCompatActivity implements S
     SwipeRefreshLayout mSwipeRefresh;
     @BindView(R.id.ll_offline)
     View mNotAvailableInternet;
+    @BindView(R.id.fab_add_new_post)
+    FloatingActionButton mFloatingActionButtonNew;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.recycler_view_reload);
-        setTitle(getString(R.string.web_service_sample));
+        setContentView(R.layout.activity_post_list);
         ButterKnife.bind(this);
         mNetworkMonitor = NetworkMonitor.register(this, this);
     }
@@ -45,6 +48,13 @@ public abstract class BaseArticleActivity extends AppCompatActivity implements S
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mSwipeRefresh.setOnRefreshListener(this);
+        mFloatingActionButtonNew.setOnClickListener(this);
+        if (savedInstanceState != null) {
+            NewPostDialogFragment fragment = (NewPostDialogFragment) getFragmentManager().findFragmentByTag(DIALOG_CREATE_TAG);
+            if (fragment != null) {
+                fragment.setPostListener(this);
+            }
+        }
     }
 
     protected void startLoading() {
@@ -58,7 +68,12 @@ public abstract class BaseArticleActivity extends AppCompatActivity implements S
     }
 
     protected void stopLoading() {
-        mSwipeRefresh.setRefreshing(false);
+        mSwipeRefresh.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefresh.setRefreshing(false);
+            }
+        });
     }
 
     @Override
@@ -85,8 +100,15 @@ public abstract class BaseArticleActivity extends AppCompatActivity implements S
     }
 
     @Override
-    public void onSelected(@NonNull Post post) {
-        //Post clicked go to next screen
-        WebServiceCommentActivity.start(this, post);
+    public void onClick(View view) {
+        if (view == mFloatingActionButtonNew) {
+            onAddNewPressed();
+        }
+    }
+
+    private void onAddNewPressed() {
+        NewPostDialogFragment dialog = NewPostDialogFragment.create();
+        dialog.setPostListener(this);
+        dialog.show(getFragmentManager(), DIALOG_CREATE_TAG);
     }
 }
