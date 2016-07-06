@@ -6,13 +6,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 
+import com.mobgen.droidcon.offline.DemosApplication;
 import com.mobgen.droidcon.offline.R;
-import com.mobgen.droidcon.offline.base.DemosApplication;
-import com.mobgen.droidcon.offline.shared.PostService;
+import com.mobgen.droidcon.offline.sdk.models.Comment;
+import com.mobgen.droidcon.offline.sdk.models.Post;
+import com.mobgen.droidcon.offline.sdk.server.PostService;
 import com.mobgen.droidcon.offline.shared.adapters.CommentAdapter;
-import com.mobgen.droidcon.offline.shared.models.Comment;
-import com.mobgen.droidcon.offline.shared.models.Post;
 import com.mobgen.droidcon.offline.shared.ui.BasePostDetailsActivity;
+
 
 import java.util.List;
 
@@ -33,9 +34,7 @@ public class WebServicePostDetailsActivity extends BasePostDetailsActivity imple
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.title_web_service_post_details));
-        mPostService = DemosApplication.instance()
-                .client()
-                .create(PostService.class);
+        mPostService = DemosApplication.instance().demoSdk().postService();
     }
 
     @Override

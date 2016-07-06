@@ -1,8 +1,9 @@
-package com.mobgen.droidcon.offline;
+package com.mobgen.droidcon.offline.shared.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.mobgen.droidcon.offline.R;
 import com.mobgen.droidcon.offline.demos.online.WebServicePostActivity;
 
 import butterknife.ButterKnife;
@@ -21,11 +22,6 @@ public class DemoSelectorActivity extends AppCompatActivity {
     @OnClick(R.id.bt_web_service)
     public void onWebServiceClick() {
         WebServicePostActivity.start(this);
-    }
-
-    @OnClick(R.id.bt_repository)
-    public void onRepositoryClick() {
-
     }
 
     @OnClick(R.id.bt_loader_job_scheduler)

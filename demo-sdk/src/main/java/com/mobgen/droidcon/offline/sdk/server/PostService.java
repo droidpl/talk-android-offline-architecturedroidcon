@@ -1,9 +1,9 @@
-package com.mobgen.droidcon.offline.shared;
+package com.mobgen.droidcon.offline.sdk.server;
 
 import android.support.annotation.NonNull;
 
-import com.mobgen.droidcon.offline.shared.models.Comment;
-import com.mobgen.droidcon.offline.shared.models.Post;
+import com.mobgen.droidcon.offline.sdk.models.Comment;
+import com.mobgen.droidcon.offline.sdk.models.Post;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public interface PostService {
 
     @NonNull
     @GET("/posts/{id}")
-    Call<Post> post(@NonNull @Query("id") Integer id);
+    Call<Post> post(@Query("id") long id);
 
     @NonNull
     @POST("/posts")
@@ -36,11 +36,11 @@ public interface PostService {
 
     @NonNull
     @DELETE("/posts/{id}")
-    Call<Void> deletePost(@Path("id") Integer id);
+    Call<Void> deletePost(@Path("id") long id);
 
     @NonNull
     @GET("/comments")
-    Call<List<Comment>> comments(@Query("postId") Integer postId);
+    Call<List<Comment>> comments(@Query("postId") long postId);
 
     @NonNull
     @POST("/comments")
@@ -52,5 +52,5 @@ public interface PostService {
 
     @NonNull
     @DELETE("/comments/{id}")
-    Call<Void> deleteComment(@Path("id") Integer id);
+    Call<Void> deleteComment(@Path("id") long id);
 }

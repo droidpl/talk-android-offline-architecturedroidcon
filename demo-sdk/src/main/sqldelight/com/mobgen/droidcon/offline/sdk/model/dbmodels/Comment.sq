@@ -1,0 +1,16 @@
+CREATE TABLE comment_db (
+  _id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  _postId INTEGER NOT NULL,
+  _name TEXT NOT NULL,
+  _body TEXT NOT NULL,
+  _email TEXT NOT NULL,
+  _createdAt INTEGER NOT NULL,
+  _updatedAt INTEGER,
+  _deletedAt INTEGER,
+  _needsSync INTEGER as Boolean DEFAULT 0 NOT NULL,
+  FOREIGN KEY(_postId) REFERENCES post_db(_id)
+);
+
+selectSyncComments: SELECT * FROM comment_db WHERE _needsSync = 1;
+selectCommentsPost: SELECT * FROM comment_db WHERE _postId = ?;
+

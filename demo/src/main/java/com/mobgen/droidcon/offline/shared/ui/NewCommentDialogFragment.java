@@ -1,4 +1,4 @@
-package com.mobgen.droidcon.offline.demos.online;
+package com.mobgen.droidcon.offline.shared.ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -11,39 +11,49 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.mobgen.droidcon.offline.R;
-import com.mobgen.droidcon.offline.shared.models.Post;
+import com.mobgen.droidcon.offline.sdk.models.Comment;
+import com.mobgen.droidcon.offline.sdk.models.Post;
 
 import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class NewPostDialogFragment extends DialogFragment {
+public class NewCommentDialogFragment extends DialogFragment {
+
+    private static final String BUNDLE_POST = "post";
 
     @BindView(R.id.et_title)
     EditText mTitle;
+    @BindView(R.id.et_email)
+    EditText mEmail;
     @BindView(R.id.et_body)
     EditText mBody;
-    private NewPostListener mCallback;
+    private NewCommentListener mCallback;
+    private Post mPost;
 
-    public static NewPostDialogFragment create() {
-        return new NewPostDialogFragment();
+    public static NewCommentDialogFragment create(@NonNull Post post) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(BUNDLE_POST, post);
+        NewCommentDialogFragment fragment = new NewCommentDialogFragment();
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
 
-    public void setPostListener(@NonNull NewPostListener listener) {
+    public void setCommentListener(@NonNull NewCommentListener listener) {
         mCallback = listener;
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        View customView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_create_post, null, false);
+        View customView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_create_comment, null, false);
         ButterKnife.bind(this, customView);
         return new AlertDialog.Builder(getActivity())
                 .setPositiveButton(getString(R.string.general_create), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        notifyNewPostAndClose();
+                        notifyNewCommentAndClose();
                     }
                 })
                 .setNegativeButton(getString(R.string.general_cancel), new DialogInterface.OnClickListener() {
@@ -55,16 +65,29 @@ public class NewPostDialogFragment extends DialogFragment {
                 .create();
     }
 
-    private void notifyNewPostAndClose() {
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Bundle arguments = getArguments();
+        if(arguments == null){
+            throw new IllegalArgumentException("You must use the create method");
+        }
+        mPost = arguments.getParcelable(BUNDLE_POST);
+    }
+
+    private void notifyNewCommentAndClose() {
         Date now = new Date();
-        Post post = Post.builder()
-                .title(mTitle.getText().toString())
+        Comment comment = Comment.builder()
+                .name(mTitle.getText().toString())
                 .body(mBody.getText().toString())
+                .email(mEmail.getText().toString())
+                .postId(mPost.id())
                 .createdAt(now.getTime())
                 .updatedAt(now.getTime())
+                .needsSync(false)
                 .build();
         if (mCallback != null) {
-            mCallback.onPostCreated(post);
+            mCallback.onCommentCreated(comment);
         }
         dismiss();
     }
@@ -75,7 +98,7 @@ public class NewPostDialogFragment extends DialogFragment {
         mCallback = null;
     }
 
-    public interface NewPostListener {
-        void onPostCreated(@NonNull Post post);
+    public interface NewCommentListener {
+        void onCommentCreated(@NonNull Comment comment);
     }
 }

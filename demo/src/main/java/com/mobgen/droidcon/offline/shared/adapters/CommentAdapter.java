@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mobgen.droidcon.offline.R;
-import com.mobgen.droidcon.offline.shared.models.Comment;
-import com.mobgen.droidcon.offline.shared.models.Post;
+import com.mobgen.droidcon.offline.sdk.models.Comment;
+import com.mobgen.droidcon.offline.sdk.models.Post;
 
 import java.util.List;
 

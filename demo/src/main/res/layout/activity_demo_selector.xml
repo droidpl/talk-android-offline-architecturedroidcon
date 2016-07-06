@@ -11,7 +11,7 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:orientation="vertical"
-        tools:context="com.mobgen.droidcon.offline.DemoSelectorActivity">
+        tools:context=".shared.ui.DemoSelectorActivity">
 
         <LinearLayout
             android:id="@+id/bt_web_service"
@@ -24,21 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/TextAppearance.AppCompat.Large"
-                android:text="@string/demo_just_web_service"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/bt_repository"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/default_padding"
-            android:background="?attr/selectableItemBackground">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/TextAppearance.AppCompat.Large"
-                android:text="@string/demo_load_with_repository"/>
+                android:text="@string/online_mode"/>
         </LinearLayout>
 
         <LinearLayout
@@ -52,7 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/TextAppearance.AppCompat.Large"
-                android:text="@string/demo_loaders_and_job_schedulers"/>
+                android:text="@string/online_and_offline_mode"/>
         </LinearLayout>
 
     </LinearLayout>

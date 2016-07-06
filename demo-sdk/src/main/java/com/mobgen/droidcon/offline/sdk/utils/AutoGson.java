@@ -1,4 +1,4 @@
-package com.mobgen.droidcon.offline.base;
+package com.mobgen.droidcon.offline.sdk.utils;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

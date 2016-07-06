@@ -1,8 +1,7 @@
 <resources>
     <string name="app_name">Offline Architecture</string>
-    <string name="demo_just_web_service">Just web service</string>
-    <string name="demo_loaders_and_job_schedulers">Loaders and Job Schedulers</string>
-    <string name="demo_load_with_repository">Load with repository</string>
+    <string name="online_mode">Online mode only</string>
+    <string name="online_and_offline_mode">Online and offline</string>
 
     <string name="title_demo_selector">Select a demo</string>
     <string name="title_web_service_post_list">Article list (Web service)</string>

@@ -14,10 +14,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.mobgen.droidcon.offline.R;
-import com.mobgen.droidcon.offline.demos.online.NewCommentDialogFragment;
-import com.mobgen.droidcon.offline.shared.adapters.CommentAdapter;
-import com.mobgen.droidcon.offline.shared.models.Post;
+import com.mobgen.droidcon.offline.sdk.models.Post;
 import com.mobgen.droidcon.offline.shared.utils.NetworkMonitor;
+import com.mobgen.droidcon.offline.shared.adapters.CommentAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

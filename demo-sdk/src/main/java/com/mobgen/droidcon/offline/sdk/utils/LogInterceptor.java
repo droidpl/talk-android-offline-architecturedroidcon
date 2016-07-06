@@ -1,8 +1,8 @@
-package com.mobgen.droidcon.offline.shared.utils;
+package com.mobgen.droidcon.offline.sdk.utils;
 
 import android.util.Log;
 
-import com.mobgen.droidcon.offline.BuildConfig;
+import com.mobgen.droidcon.offline.sdk.BuildConfig;
 
 import java.io.IOException;
 
@@ -51,17 +51,15 @@ public class LogInterceptor implements Interceptor {
     public Response interceptResponse(Request request, Response response) {
         //It does not print to avoid wasting time on the object creation
         Response finalResponse = response;
-        if (BuildConfig.DEBUG) {
-            Log.d("Response", String.format("%s \n%s", request.url(), request.headers().toString()));
-            //Log the response
-            try {
-                ResponseBody responseBody = response.body();
-                String responseBodyString = responseBody.string();
-                Log.d("Response data", responseBodyString);
-                finalResponse = response.newBuilder().body(ResponseBody.create(responseBody.contentType(), responseBodyString)).build();
-            } catch (IOException e) {
-                Log.e("Response", "Error while parsing the response.");
-            }
+        Log.d("Response", String.format("%s \n%s", request.url(), request.headers().toString()));
+        //Log the response
+        try {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody.string();
+            Log.d("Response data", responseBodyString);
+            finalResponse = response.newBuilder().body(ResponseBody.create(responseBody.contentType(), responseBodyString)).build();
+        } catch (IOException e) {
+            Log.e("Response", "Error while parsing the response.");
         }
         return finalResponse;
     }

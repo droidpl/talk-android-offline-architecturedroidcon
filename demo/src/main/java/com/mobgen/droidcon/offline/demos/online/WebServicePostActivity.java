@@ -8,11 +8,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 
+import com.mobgen.droidcon.offline.DemosApplication;
 import com.mobgen.droidcon.offline.R;
-import com.mobgen.droidcon.offline.base.DemosApplication;
-import com.mobgen.droidcon.offline.shared.PostService;
+import com.mobgen.droidcon.offline.sdk.models.Post;
+import com.mobgen.droidcon.offline.sdk.server.PostService;
 import com.mobgen.droidcon.offline.shared.adapters.PostAdapter;
-import com.mobgen.droidcon.offline.shared.models.Post;
 import com.mobgen.droidcon.offline.shared.ui.BasePostActivity;
 
 import java.util.Date;
@@ -37,9 +37,7 @@ public class WebServicePostActivity extends BasePostActivity implements PostAdap
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.title_web_service_post_list));
-        mPostService = DemosApplication.instance()
-                .client()
-                .create(PostService.class);
+        mPostService = DemosApplication.instance().demoSdk().postService();
     }
 
     @Override
@@ -87,8 +85,6 @@ public class WebServicePostActivity extends BasePostActivity implements PostAdap
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mAdapter.posts().remove(position);
-                        mAdapter.notifyItemRemoved(position);
                         reloadPosts();
                     }
                 }, 2000);

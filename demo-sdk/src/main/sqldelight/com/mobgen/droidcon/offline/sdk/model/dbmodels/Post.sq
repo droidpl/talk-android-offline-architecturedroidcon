@@ -1,0 +1,12 @@
+CREATE TABLE post_db (
+  _id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  _title TEXT NOT NULL,
+  _body TEXT NOT NULL,
+  _createdAt INTEGER NOT NULL,
+  _updatedAt INTEGER,
+  _deletedAt INTEGER,
+  _needsSync INTEGER as Boolean DEFAULT 0 NOT NULL
+);
+
+selectSyncPosts: SELECT * FROM post_db WHERE _needsSync = 1;
+
