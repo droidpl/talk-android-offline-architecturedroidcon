@@ -1,4 +1,4 @@
-package com.mobgen.droidcon.offline.sdk.database;
+package com.mobgen.droidcon.offline.sdk.base;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
@@ -39,7 +39,7 @@ public class DatabaseManager {
         }
     }
 
-    public void transaction(@NonNull Transaction transaction) throws Exception {
+    public void transaction(@NonNull Transaction transaction) throws DatabaseException {
         SQLiteDatabase database = openDatabase();
         database.beginTransaction();
         try {
@@ -47,7 +47,7 @@ public class DatabaseManager {
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e("Database error", e.getMessage(), e);
-            throw e;
+            throw new DatabaseException("Error while performing the transaction", e);
         } finally {
             database.endTransaction();
             closeDatabase();
@@ -56,7 +56,16 @@ public class DatabaseManager {
     }
 
     public interface Transaction {
-        void onTransaction(@NonNull SQLiteDatabase database) throws Exception;
+        void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseException;
     }
 
+    public class DatabaseException extends Exception {
+        public DatabaseException(String detailMessage) {
+            super(detailMessage);
+        }
+
+        public DatabaseException(String detailMessage, Throwable throwable) {
+            super(detailMessage, throwable);
+        }
+    }
 }

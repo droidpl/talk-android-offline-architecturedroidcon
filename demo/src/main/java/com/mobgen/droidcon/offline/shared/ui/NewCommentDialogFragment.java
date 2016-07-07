@@ -78,13 +78,13 @@ public class NewCommentDialogFragment extends DialogFragment {
     private void notifyNewCommentAndClose() {
         Date now = new Date();
         Comment comment = Comment.builder()
+                .id(-1L)
                 .name(mTitle.getText().toString())
                 .body(mBody.getText().toString())
                 .email(mEmail.getText().toString())
                 .postId(mPost.id())
                 .createdAt(now.getTime())
-                .updatedAt(now.getTime())
-                .needsSync(false)
+                .needsSync(true)
                 .build();
         if (mCallback != null) {
             mCallback.onCommentCreated(comment);

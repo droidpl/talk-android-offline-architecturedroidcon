@@ -16,6 +16,12 @@ public class NetworkMonitor extends BroadcastReceiver {
         mConnectivityListener = connectivityListener;
     }
 
+    public static boolean isNetworkConnected(@NonNull Context context){
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
     @NonNull
     public static NetworkMonitor register(@NonNull Context context, @NonNull ConnectivityListener listener) {
         NetworkMonitor monitor = new NetworkMonitor(listener);
@@ -27,12 +33,8 @@ public class NetworkMonitor extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
         if (mConnectivityListener != null) {
-            mConnectivityListener.onConnectionChanged(isConnected);
+            mConnectivityListener.onConnectionChanged(isNetworkConnected(context));
         }
     }
 

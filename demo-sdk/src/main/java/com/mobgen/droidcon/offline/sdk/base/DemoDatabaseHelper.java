@@ -1,12 +1,12 @@
-package com.mobgen.droidcon.offline.sdk.database;
+package com.mobgen.droidcon.offline.sdk.base;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
 
-import com.mobgen.droidcon.offline.sdk.model.dbmodels.CommentModel;
-import com.mobgen.droidcon.offline.sdk.model.dbmodels.PostModel;
+import com.mobgen.droidcon.offline.sdk.model.db.CommentModel;
+import com.mobgen.droidcon.offline.sdk.model.db.PostModel;
 
 
 public class DemoDatabaseHelper extends SQLiteOpenHelper {

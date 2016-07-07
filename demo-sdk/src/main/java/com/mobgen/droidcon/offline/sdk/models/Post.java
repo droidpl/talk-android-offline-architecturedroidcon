@@ -6,14 +6,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
-import com.mobgen.droidcon.offline.sdk.models.dbmodels.PostDb;
-import com.mobgen.droidcon.offline.sdk.utils.AutoGson;
+import com.mobgen.droidcon.offline.sdk.base.AutoGson;
+import com.mobgen.droidcon.offline.sdk.models.db.PostDb;
 
 @AutoValue
 @AutoGson(autoClass = AutoValue_Post.class)
 public abstract class Post implements Parcelable {
 
-    @Nullable
+    @NonNull
     public abstract Long id();
 
     @NonNull
@@ -62,11 +62,19 @@ public abstract class Post implements Parcelable {
                 .needsSync(post.needsSync());
     }
 
+    public boolean isNew() {
+        return id() == -1L;
+    }
+
+    public boolean isDeleted() {
+        return deletedAt() != null;
+    }
+
     @AutoValue.Builder
     public static abstract class Builder {
 
         @NonNull
-        public abstract Builder id(@Nullable Long id);
+        public abstract Builder id(@NonNull Long id);
 
         @NonNull
         public abstract Builder title(@NonNull String title);

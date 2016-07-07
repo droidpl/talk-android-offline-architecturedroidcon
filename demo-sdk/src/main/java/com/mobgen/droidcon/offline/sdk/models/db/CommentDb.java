@@ -1,7 +1,8 @@
-package com.mobgen.droidcon.offline.sdk.models.dbmodels;
+package com.mobgen.droidcon.offline.sdk.models.db;
 
 import com.google.auto.value.AutoValue;
-import com.mobgen.droidcon.offline.sdk.model.dbmodels.CommentModel;
+import com.mobgen.droidcon.offline.sdk.model.db.CommentModel;
+import com.mobgen.droidcon.offline.sdk.models.Comment;
 import com.squareup.sqldelight.RowMapper;
 
 @AutoValue
@@ -17,4 +18,17 @@ public abstract class CommentDb implements CommentModel {
     public static final RowMapper<CommentDb> COMMENTS_POST_MAPPER = FACTORY.selectCommentsPostMapper();
 
     public static final RowMapper<CommentDb> SYNC_POSTS_MAPPER = FACTORY.selectSyncCommentsMapper();
+
+    public Comment asModel() {
+        return Comment.builder()
+                .id(_id())
+                .name(_name())
+                .body(_body())
+                .email(_email())
+                .createdAt(_createdAt())
+                .updatedAt(_updatedAt())
+                .deletedAt(_deletedAt())
+                .needsSync(_needsSync())
+                .build();
+    }
 }

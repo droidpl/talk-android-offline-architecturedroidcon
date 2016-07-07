@@ -5,14 +5,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
-import com.mobgen.droidcon.offline.sdk.models.dbmodels.CommentDb;
-import com.mobgen.droidcon.offline.sdk.utils.AutoGson;
+import com.mobgen.droidcon.offline.sdk.base.AutoGson;
+import com.mobgen.droidcon.offline.sdk.models.db.CommentDb;
 
 @AutoValue
 @AutoGson(autoClass = AutoValue_Comment.class)
 public abstract class Comment {
 
-    @Nullable
+    @NonNull
     public abstract Long id();
 
     @NonNull
@@ -39,7 +39,7 @@ public abstract class Comment {
     public abstract boolean needsSync();
 
     @NonNull
-    public ContentValues marshal(){
+    public ContentValues marshal() {
         return CommentDb.FACTORY.marshal()
                 ._id(id())
                 ._postId(postId())
@@ -72,11 +72,19 @@ public abstract class Comment {
                 .needsSync(comment.needsSync());
     }
 
+    public boolean isNew() {
+        return id() == -1L;
+    }
+
+    public boolean isDeleted() {
+        return deletedAt() != null;
+    }
+
     @AutoValue.Builder
     public static abstract class Builder {
 
         @NonNull
-        public abstract Builder id(@Nullable Long id);
+        public abstract Builder id(@NonNull Long id);
 
         @NonNull
         public abstract Builder postId(@NonNull Long postId);

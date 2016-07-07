@@ -58,10 +58,11 @@ public class NewPostDialogFragment extends DialogFragment {
     private void notifyNewPostAndClose() {
         Date now = new Date();
         Post post = Post.builder()
+                .id(-1L)
                 .title(mTitle.getText().toString())
                 .body(mBody.getText().toString())
                 .createdAt(now.getTime())
-                .updatedAt(now.getTime())
+                .needsSync(true)
                 .build();
         if (mCallback != null) {
             mCallback.onPostCreated(post);

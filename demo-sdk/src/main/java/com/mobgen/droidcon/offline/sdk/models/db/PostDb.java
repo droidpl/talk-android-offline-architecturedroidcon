@@ -1,7 +1,8 @@
-package com.mobgen.droidcon.offline.sdk.models.dbmodels;
+package com.mobgen.droidcon.offline.sdk.models.db;
 
 import com.google.auto.value.AutoValue;
-import com.mobgen.droidcon.offline.sdk.model.dbmodels.PostModel;
+import com.mobgen.droidcon.offline.sdk.model.db.PostModel;
+import com.mobgen.droidcon.offline.sdk.models.Post;
 import com.squareup.sqldelight.RowMapper;
 
 @AutoValue
@@ -14,6 +15,19 @@ public abstract class PostDb implements PostModel {
         }
     });
 
+    public Post asModel() {
+        return Post.builder()
+                .id(_id())
+                .title(_title())
+                .body(_body())
+                .createdAt(_createdAt())
+                .updatedAt(_updatedAt())
+                .deletedAt(_deletedAt())
+                .needsSync(_needsSync())
+                .build();
+    }
+
     public static final RowMapper<PostDb> POST_SYNC_MAPPER = FACTORY.selectSyncPostsMapper();
+    public static final RowMapper<PostDb> ALL_POSTS_MAPPER = FACTORY.selectSyncPostsMapper();
 
 }

@@ -4,8 +4,10 @@
     <string name="online_and_offline_mode">Online and offline</string>
 
     <string name="title_demo_selector">Select a demo</string>
-    <string name="title_web_service_post_list">Article list (Web service)</string>
-    <string name="title_web_service_post_details">Article details (Web service)</string>
+    <string name="title_online_post_list">Article list (Online)</string>
+    <string name="title_online_post_details">Article details (Online)</string>
+    <string name="title_offline_post_list">Article list (Offline)</string>
+    <string name="title_offline_post_details">Article details (Offline)</string>
     <string name="title_create_post">Create new post</string>
     <string name="title_create_comment">Create new comment</string>
 

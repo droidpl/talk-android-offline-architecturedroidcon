@@ -11,6 +11,12 @@ CREATE TABLE comment_db (
   FOREIGN KEY(_postId) REFERENCES post_db(_id)
 );
 
-selectSyncComments: SELECT * FROM comment_db WHERE _needsSync = 1;
-selectCommentsPost: SELECT * FROM comment_db WHERE _postId = ?;
+selectSyncComments:
+    SELECT * FROM comment_db WHERE _needsSync = 1;
+selectCommentsPost:
+    SELECT * FROM comment_db WHERE _postId = ?;
+deleteComment:
+    DELETE FROM comment_db WHERE _id = ?;
+deleteCommentsByPost:
+    DELETE FROM comment_db WHERE _postId = ?;
 

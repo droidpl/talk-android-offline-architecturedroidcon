@@ -20,9 +20,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".demos.online.WebServicePostActivity" />
+        <activity android:name=".demos.online.OnlinePostActivity" />
 
-        <activity android:name=".demos.online.WebServicePostDetailsActivity" />
+        <activity android:name=".demos.online.OnlinePostDetailsActivity" />
+
+        <activity android:name=".demos.offline.OfflinePostActivity"/>
+
+        <activity android:name=".demos.offline.OfflinePostDetailsActivity"/>
     </application>
 
 </manifest>

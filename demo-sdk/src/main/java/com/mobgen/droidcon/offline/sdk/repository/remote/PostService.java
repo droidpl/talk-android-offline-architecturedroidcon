@@ -1,4 +1,4 @@
-package com.mobgen.droidcon.offline.sdk.server;
+package com.mobgen.droidcon.offline.sdk.repository.remote;
 
 import android.support.annotation.NonNull;
 

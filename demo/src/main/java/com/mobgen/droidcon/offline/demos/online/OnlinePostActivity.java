@@ -11,7 +11,7 @@ import android.support.design.widget.Snackbar;
 import com.mobgen.droidcon.offline.DemosApplication;
 import com.mobgen.droidcon.offline.R;
 import com.mobgen.droidcon.offline.sdk.models.Post;
-import com.mobgen.droidcon.offline.sdk.server.PostService;
+import com.mobgen.droidcon.offline.sdk.repository.remote.PostService;
 import com.mobgen.droidcon.offline.shared.adapters.PostAdapter;
 import com.mobgen.droidcon.offline.shared.ui.BasePostActivity;
 
@@ -22,21 +22,21 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class WebServicePostActivity extends BasePostActivity implements PostAdapter.PostListener {
+public class OnlinePostActivity extends BasePostActivity implements PostAdapter.PostListener {
 
     private PostService mPostService;
     private PostAdapter mAdapter;
     private Call<Void> mDeletedCall;
 
     public static void start(@NonNull Context context) {
-        Intent intent = new Intent(context, WebServicePostActivity.class);
+        Intent intent = new Intent(context, OnlinePostActivity.class);
         context.startActivity(intent);
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(getString(R.string.title_web_service_post_list));
+        setTitle(R.string.title_online_post_list);
         mPostService = DemosApplication.instance().demoSdk().postService();
     }
 
@@ -56,7 +56,7 @@ public class WebServicePostActivity extends BasePostActivity implements PostAdap
         mPostService.posts().enqueue(new Callback<List<Post>>() {
             @Override
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
-                mAdapter = new PostAdapter(response.body(), WebServicePostActivity.this);
+                mAdapter = new PostAdapter(response.body(), OnlinePostActivity.this);
                 setAdapter(mAdapter);
                 stopLoading();
             }
@@ -102,7 +102,7 @@ public class WebServicePostActivity extends BasePostActivity implements PostAdap
     @Override
     public void onSelected(@NonNull Post post) {
         //Post clicked go to next screen
-        WebServicePostDetailsActivity.start(this, post);
+        OnlinePostDetailsActivity.start(this, post);
     }
 
     @Override

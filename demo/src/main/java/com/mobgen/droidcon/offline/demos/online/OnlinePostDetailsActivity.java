@@ -10,7 +10,7 @@ import com.mobgen.droidcon.offline.DemosApplication;
 import com.mobgen.droidcon.offline.R;
 import com.mobgen.droidcon.offline.sdk.models.Comment;
 import com.mobgen.droidcon.offline.sdk.models.Post;
-import com.mobgen.droidcon.offline.sdk.server.PostService;
+import com.mobgen.droidcon.offline.sdk.repository.remote.PostService;
 import com.mobgen.droidcon.offline.shared.adapters.CommentAdapter;
 import com.mobgen.droidcon.offline.shared.ui.BasePostDetailsActivity;
 
@@ -21,19 +21,19 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class WebServicePostDetailsActivity extends BasePostDetailsActivity implements CommentAdapter.CommentListener {
+public class OnlinePostDetailsActivity extends BasePostDetailsActivity implements CommentAdapter.CommentListener {
 
     private CommentAdapter mCommentAdapter;
     private PostService mPostService;
 
     public static void start(@NonNull Context context, @NonNull Post post) {
-        context.startActivity(getIntent(context, post, WebServicePostDetailsActivity.class));
+        context.startActivity(getIntent(context, post, OnlinePostDetailsActivity.class));
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(getString(R.string.title_web_service_post_details));
+        setTitle(R.string.title_online_post_details);
         mPostService = DemosApplication.instance().demoSdk().postService();
     }
 
@@ -53,7 +53,7 @@ public class WebServicePostDetailsActivity extends BasePostDetailsActivity imple
         mPostService.comments(mCurrentPost.id()).enqueue(new Callback<List<Comment>>() {
             @Override
             public void onResponse(Call<List<Comment>> call, Response<List<Comment>> response) {
-                mCommentAdapter = new CommentAdapter(mCurrentPost, response.body(), WebServicePostDetailsActivity.this);
+                mCommentAdapter = new CommentAdapter(mCurrentPost, response.body(), OnlinePostDetailsActivity.this);
                 setAdapter(mCommentAdapter);
                 stopLoading();
             }

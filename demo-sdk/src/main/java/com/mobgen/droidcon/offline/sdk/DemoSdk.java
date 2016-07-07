@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.mobgen.droidcon.offline.sdk.repository.PostRepository;
-import com.mobgen.droidcon.offline.sdk.server.PostService;
+import com.mobgen.droidcon.offline.sdk.repository.remote.PostService;
 
 public interface DemoSdk {
     PostRepository postRepository();
@@ -12,8 +12,18 @@ public interface DemoSdk {
     PostService postService();
 
     class Factory {
-        public static DemoSdk init(@NonNull Context context) {
-            return new DemoSdkImpl(context.getApplicationContext());
+
+        private static DemoSdk sInstance;
+
+        public static synchronized DemoSdk init(@NonNull Context context) {
+            if (sInstance == null) {
+                sInstance = new DemoSdkImpl(context.getApplicationContext());
+            }
+            return sInstance;
+        }
+
+        public static DemoSdk instance() {
+            return sInstance;
         }
     }
 }

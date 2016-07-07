@@ -12,17 +12,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.mobgen.droidcon.offline.R;
+import com.mobgen.droidcon.offline.sdk.models.Post;
 import com.mobgen.droidcon.offline.shared.utils.NetworkMonitor;
 import com.mobgen.droidcon.offline.shared.adapters.PostAdapter;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public abstract class BasePostActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, NetworkMonitor.ConnectivityListener, View.OnClickListener, NewPostDialogFragment.NewPostListener {
+public abstract class BasePostActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, NetworkMonitor.ConnectivityListener, View.OnClickListener, NewPostDialogFragment.NewPostListener, PostAdapter.PostListener {
 
     private static final String DIALOG_CREATE_TAG = "create_post_dialog";
 
     private NetworkMonitor mNetworkMonitor;
+    private PostAdapter mAdapter;
 
     @BindView(R.id.rv_list)
     protected RecyclerView mRecyclerView;
@@ -94,8 +98,18 @@ public abstract class BasePostActivity extends AppCompatActivity implements Swip
         }
     }
 
-    public void setAdapter(@NonNull PostAdapter adapter) {
-        mRecyclerView.setAdapter(adapter);
+    public void setAdapter(@Nullable PostAdapter adapter) {
+        mAdapter = adapter;
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
+    public void setAdapter(@Nullable List<Post> posts) {
+        if(mAdapter != null){
+            mAdapter.posts(posts);
+        }else{
+            setAdapter(new PostAdapter(posts, this));
+        }
+
     }
 
     @Override

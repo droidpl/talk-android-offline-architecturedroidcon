@@ -1,4 +1,4 @@
-package com.mobgen.droidcon.offline.sdk.utils;
+package com.mobgen.droidcon.offline.sdk.base;
 
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
