@@ -6,14 +6,20 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import com.mobgen.droidcon.offline.sdk.base.AutoGson;
+import com.mobgen.droidcon.offline.sdk.model.db.PostModel;
 import com.mobgen.droidcon.offline.sdk.models.db.PostDb;
 
 @AutoValue
 @AutoGson(autoClass = AutoValue_Post.class)
 public abstract class Post implements Parcelable {
 
-    @NonNull
+    @Nullable
+    public abstract Long internalId();
+
+    @Nullable
     public abstract Long id();
 
     @NonNull
@@ -34,15 +40,19 @@ public abstract class Post implements Parcelable {
     public abstract boolean needsSync();
 
     public ContentValues marshal() {
-        return PostDb.FACTORY.marshal()
-                ._id(id())
+        PostModel.Marshal marshal = PostDb.FACTORY.marshal()
+                ._remoteId(id())
                 ._title(title())
                 ._body(body())
                 ._createdAt(createdAt())
                 ._updatedAt(updatedAt())
                 ._deletedAt(deletedAt())
-                ._needsSync(needsSync())
-                .asContentValues();
+                ._needsSync(needsSync());
+        Long internalId = internalId();
+        if(internalId != null){
+            marshal._id(internalId);
+        }
+        return marshal.asContentValues();
     }
 
     @NonNull
@@ -63,7 +73,11 @@ public abstract class Post implements Parcelable {
     }
 
     public boolean isNew() {
-        return id() == -1L;
+        return id() == null;
+    }
+
+    public boolean isStoredLocally(){
+        return internalId() != null;
     }
 
     public boolean isDeleted() {
@@ -74,7 +88,10 @@ public abstract class Post implements Parcelable {
     public static abstract class Builder {
 
         @NonNull
-        public abstract Builder id(@NonNull Long id);
+        public abstract Builder internalId(@Nullable Long id);
+
+        @NonNull
+        public abstract Builder id(@Nullable Long id);
 
         @NonNull
         public abstract Builder title(@NonNull String title);

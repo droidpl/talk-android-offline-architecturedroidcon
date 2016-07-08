@@ -78,7 +78,7 @@ public class NewCommentDialogFragment extends DialogFragment {
     private void notifyNewCommentAndClose() {
         Date now = new Date();
         Comment comment = Comment.builder()
-                .id(-1L)
+                .id(null)
                 .name(mTitle.getText().toString())
                 .body(mBody.getText().toString())
                 .email(mEmail.getText().toString())

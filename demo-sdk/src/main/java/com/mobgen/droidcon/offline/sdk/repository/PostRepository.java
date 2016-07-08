@@ -60,8 +60,8 @@ public class PostRepository {
     public void localDelete(@NonNull Post post) throws RepositoryException {
         try {
             long now = new Date().getTime();
-            if(post.isNew()){
-                mPostDao.delete(post.id());
+            if(post.isNew() && post.isStoredLocally()){
+                mPostDao.delete(post.internalId());
                 SyncService.notifyChange(mContext);
             }else {
                 mPostDao.save(Post.builder(post)
@@ -92,9 +92,15 @@ public class PostRepository {
 
     @WorkerThread
     public void remoteCreate(@NonNull Post post) throws DatabaseManager.DatabaseException, IOException {
-        Response<Post> postResponse = mPostService.create(post).execute();
+        //Remove the internal id
+        Response<Post> postResponse = mPostService.create(Post.builder(post)
+                .internalId(null)
+                .build()).execute();
         if (postResponse.isSuccessful()) {
-            mPostDao.save(postResponse.body());
+            //Add the internal id again
+            mPostDao.save(Post.builder(postResponse.body())
+                    .internalId(post.internalId())
+                    .build());
         }
     }
 

@@ -58,7 +58,7 @@ public class NewPostDialogFragment extends DialogFragment {
     private void notifyNewPostAndClose() {
         Date now = new Date();
         Post post = Post.builder()
-                .id(-1L)
+                .id(null)
                 .title(mTitle.getText().toString())
                 .body(mBody.getText().toString())
                 .createdAt(now.getTime())

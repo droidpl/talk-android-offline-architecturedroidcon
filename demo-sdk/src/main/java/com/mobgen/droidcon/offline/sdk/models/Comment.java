@@ -6,13 +6,17 @@ import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.mobgen.droidcon.offline.sdk.base.AutoGson;
+import com.mobgen.droidcon.offline.sdk.model.db.CommentModel;
 import com.mobgen.droidcon.offline.sdk.models.db.CommentDb;
 
 @AutoValue
 @AutoGson(autoClass = AutoValue_Comment.class)
 public abstract class Comment {
 
-    @NonNull
+    @Nullable
+    public abstract Long internalId();
+
+    @Nullable
     public abstract Long id();
 
     @NonNull
@@ -40,8 +44,8 @@ public abstract class Comment {
 
     @NonNull
     public ContentValues marshal() {
-        return CommentDb.FACTORY.marshal()
-                ._id(id())
+        CommentModel.Marshal marshal = CommentDb.FACTORY.marshal()
+                ._remoteId(id())
                 ._postId(postId())
                 ._name(name())
                 ._body(body())
@@ -49,8 +53,12 @@ public abstract class Comment {
                 ._createdAt(createdAt())
                 ._updatedAt(updatedAt())
                 ._deletedAt(deletedAt())
-                ._needsSync(needsSync())
-                .asContentValues();
+                ._needsSync(needsSync());
+        Long internalId = internalId();
+        if(internalId != null){
+            marshal._id(internalId);
+        }
+        return marshal.asContentValues();
     }
 
     @NonNull
@@ -61,8 +69,9 @@ public abstract class Comment {
     @NonNull
     public static Builder builder(@NonNull Comment comment) {
         return builder()
-                .postId(comment.postId())
+                .internalId(comment.internalId())
                 .id(comment.id())
+                .postId(comment.postId())
                 .name(comment.name())
                 .email(comment.email())
                 .body(comment.body())
@@ -73,7 +82,7 @@ public abstract class Comment {
     }
 
     public boolean isNew() {
-        return id() == -1L;
+        return id() == null;
     }
 
     public boolean isDeleted() {
@@ -84,7 +93,10 @@ public abstract class Comment {
     public static abstract class Builder {
 
         @NonNull
-        public abstract Builder id(@NonNull Long id);
+        public abstract Builder internalId(@Nullable Long id);
+
+        @NonNull
+        public abstract Builder id(@Nullable Long id);
 
         @NonNull
         public abstract Builder postId(@NonNull Long postId);

@@ -74,11 +74,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         public void bind(@NonNull Post post) {
             mTitle.setText(post.title());
             mBody.setText(post.body());
+            mDelete.setVisibility(View.VISIBLE);
             int colorPost = R.color.white;
             if(post.isNew()){
                 colorPost = R.color.colorAccent;
             } else if (post.isDeleted()) {
                 colorPost = R.color.deletedColor;
+                mDelete.setVisibility(View.GONE);
             }
             int color = ContextCompat.getColor(itemView.getContext(), colorPost);
             itemView.setBackgroundColor(color);

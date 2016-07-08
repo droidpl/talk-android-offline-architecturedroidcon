@@ -10,8 +10,8 @@ public abstract class CommentDb implements CommentModel {
 
     public static final Factory<CommentDb> FACTORY = new Factory<>(new CommentModel.Creator<CommentDb>() {
         @Override
-        public CommentDb create(long id, long postId, String name, String body, String email, long createdAt, Long updatedAt, Long deletedAt, boolean needsSync) {
-            return new AutoValue_CommentDb(id, postId, name, body, email, createdAt, updatedAt, deletedAt, needsSync);
+        public CommentDb create(long id, Long remoteId, long postId, String name, String body, String email, long createdAt, Long updatedAt, Long deletedAt, boolean needsSync) {
+            return new AutoValue_CommentDb(id, remoteId, postId, name, body, email, createdAt, updatedAt, deletedAt, needsSync);
         }
     });
 
@@ -21,7 +21,8 @@ public abstract class CommentDb implements CommentModel {
 
     public Comment asModel() {
         return Comment.builder()
-                .id(_id())
+                .internalId(_id())
+                .id(_remoteId())
                 .name(_name())
                 .body(_body())
                 .email(_email())

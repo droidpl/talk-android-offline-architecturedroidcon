@@ -10,14 +10,15 @@ public abstract class PostDb implements PostModel {
 
     public static final PostModel.Factory<PostDb> FACTORY = new PostModel.Factory<>(new PostModel.Creator<PostDb>() {
         @Override
-        public PostDb create(long id, String title, String body, long createdAt, Long updatedAt, Long deletedAt, boolean needsSync) {
-            return new AutoValue_PostDb(id, title, body, createdAt, updatedAt, deletedAt, needsSync);
+        public PostDb create(long id, Long remoteId, String title, String body, long createdAt, Long updatedAt, Long deletedAt, boolean needsSync) {
+            return new AutoValue_PostDb(id, remoteId, title, body, createdAt, updatedAt, deletedAt, needsSync);
         }
     });
 
     public Post asModel() {
         return Post.builder()
-                .id(_id())
+                .internalId(_id())
+                .id(_remoteId())
                 .title(_title())
                 .body(_body())
                 .createdAt(_createdAt())
