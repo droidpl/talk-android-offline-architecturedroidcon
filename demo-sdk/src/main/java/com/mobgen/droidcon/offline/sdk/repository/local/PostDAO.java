@@ -3,6 +3,7 @@ package com.mobgen.droidcon.offline.sdk.repository.local;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 import android.util.Log;
 
@@ -83,14 +84,16 @@ public class PostDAO {
     }
 
     @WorkerThread
-    public void delete(final long postId) throws DatabaseManager.DatabaseException {
-        mDatabaseManager.transaction(new DatabaseManager.Transaction() {
-            @Override
-            public void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseManager.DatabaseException {
-                database.execSQL(CommentModel.DELETECOMMENTSBYPOST, new Long[]{postId});
-                database.execSQL(PostModel.DELETEPOST, new Long[]{postId});
-            }
-        });
+    public void delete(@Nullable final Long internalId) throws DatabaseManager.DatabaseException {
+        if(internalId != null) {
+            mDatabaseManager.transaction(new DatabaseManager.Transaction() {
+                @Override
+                public void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseManager.DatabaseException {
+                    database.execSQL(CommentModel.DELETECOMMENTSBYPOST, new Long[]{internalId});
+                    database.execSQL(PostModel.DELETEPOST, new Long[]{internalId});
+                }
+            });
+        }
     }
 
     @WorkerThread

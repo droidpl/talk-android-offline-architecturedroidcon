@@ -1,7 +1,8 @@
 CREATE TABLE comment_db (
   _id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   _remoteId INTEGER,
-  _postId INTEGER NOT NULL,
+  _internalPostId INTEGER NOT NULL,
+  _postId INTEGER,
   _name TEXT NOT NULL,
   _body TEXT NOT NULL,
   _email TEXT NOT NULL,
@@ -9,13 +10,14 @@ CREATE TABLE comment_db (
   _updatedAt INTEGER,
   _deletedAt INTEGER,
   _needsSync INTEGER as Boolean DEFAULT 0 NOT NULL,
-  FOREIGN KEY(_postId) REFERENCES post_db(_id)
+  FOREIGN KEY(_internalPostId) REFERENCES post_db(_id) ON UPDATE CASCADE,
+  FOREIGN KEY(_postId) REFERENCES post_db(_remoteId)
 );
 
 selectSyncComments:
     SELECT * FROM comment_db WHERE _needsSync = 1;
 selectCommentsPost:
-    SELECT * FROM comment_db WHERE _postId = ?;
+    SELECT * FROM comment_db WHERE _internalPostId = ?;
 deleteComment:
     DELETE FROM comment_db WHERE _id = ?;
 deleteCommentsByPost:

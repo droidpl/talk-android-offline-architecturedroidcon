@@ -6,7 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
-import com.google.gson.annotations.Expose;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.mobgen.droidcon.offline.sdk.base.AutoGson;
 import com.mobgen.droidcon.offline.sdk.model.db.PostModel;
@@ -55,6 +56,18 @@ public abstract class Post implements Parcelable {
         return marshal.asContentValues();
     }
 
+    public boolean isNew() {
+        return id() == null;
+    }
+
+    public boolean isStoredLocally(){
+        return internalId() != null;
+    }
+
+    public boolean isDeleted() {
+        return deletedAt() != null;
+    }
+
     @NonNull
     public static Builder builder() {
         return new AutoValue_Post.Builder();
@@ -70,18 +83,6 @@ public abstract class Post implements Parcelable {
                 .updatedAt(post.updatedAt())
                 .deletedAt(post.deletedAt())
                 .needsSync(post.needsSync());
-    }
-
-    public boolean isNew() {
-        return id() == null;
-    }
-
-    public boolean isStoredLocally(){
-        return internalId() != null;
-    }
-
-    public boolean isDeleted() {
-        return deletedAt() != null;
     }
 
     @AutoValue.Builder

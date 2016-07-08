@@ -14,6 +14,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.mobgen.droidcon.offline.sdk.DemoSdk;
+import com.mobgen.droidcon.offline.sdk.sync.loaders.CommentLoader;
 
 public class SyncService extends JobService {
 
@@ -36,6 +37,14 @@ public class SyncService extends JobService {
         SyncServiceReceiver receiver = new SyncServiceReceiver(loader);
         LocalBroadcastManager.getInstance(loader.getContext()).registerReceiver(receiver, filter);
         return receiver;
+    }
+
+    public static void removeUpdateListener(@NonNull Loader loader, @NonNull BroadcastReceiver mObserver) {
+        LocalBroadcastManager.getInstance(loader.getContext()).unregisterReceiver(mObserver);
+    }
+
+    public static void notifyChange(@NonNull Context context) {
+        LocalBroadcastManager.getInstance(context).sendBroadcast(getCompletionIntent());
     }
 
     public static Intent getCompletionIntent() {
@@ -64,10 +73,6 @@ public class SyncService extends JobService {
             reschedule = true;
         }
         return reschedule;
-    }
-
-    public static void notifyChange(@NonNull Context context) {
-        LocalBroadcastManager.getInstance(context).sendBroadcast(getCompletionIntent());
     }
 
     private static class SyncServiceReceiver extends BroadcastReceiver {

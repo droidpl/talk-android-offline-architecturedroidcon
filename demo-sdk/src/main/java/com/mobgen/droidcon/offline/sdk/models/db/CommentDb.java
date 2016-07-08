@@ -9,9 +9,10 @@ import com.squareup.sqldelight.RowMapper;
 public abstract class CommentDb implements CommentModel {
 
     public static final Factory<CommentDb> FACTORY = new Factory<>(new CommentModel.Creator<CommentDb>() {
+
         @Override
-        public CommentDb create(long id, Long remoteId, long postId, String name, String body, String email, long createdAt, Long updatedAt, Long deletedAt, boolean needsSync) {
-            return new AutoValue_CommentDb(id, remoteId, postId, name, body, email, createdAt, updatedAt, deletedAt, needsSync);
+        public CommentDb create(long id, Long remoteId, long internalPostId, Long postId, String name, String body, String email, long createdAt, Long updatedAt, Long deletedAt, boolean needsSync) {
+            return new AutoValue_CommentDb(id, remoteId, internalPostId, postId, name, body, email, createdAt, updatedAt, deletedAt, needsSync);
         }
     });
 
@@ -23,6 +24,8 @@ public abstract class CommentDb implements CommentModel {
         return Comment.builder()
                 .internalId(_id())
                 .id(_remoteId())
+                .postId(_postId())
+                .internalPostId(_internalPostId())
                 .name(_name())
                 .body(_body())
                 .email(_email())

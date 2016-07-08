@@ -9,7 +9,11 @@ CREATE TABLE post_db (
   _needsSync INTEGER as Boolean DEFAULT 0 NOT NULL
 );
 
-selectSyncPosts: SELECT * FROM post_db WHERE _needsSync = 1;
-selectPosts: SELECT * FROM post_db;
-deletePost: DELETE FROM post_db WHERE _id = ?;
-deleteAll: DELETE FROM post_db;
+selectSyncPosts:
+    SELECT * FROM post_db WHERE _needsSync = 1;
+selectPosts:
+    SELECT * FROM post_db;
+deletePost:
+    DELETE FROM post_db WHERE _id = ?;
+deleteAll:
+    DELETE FROM post_db;

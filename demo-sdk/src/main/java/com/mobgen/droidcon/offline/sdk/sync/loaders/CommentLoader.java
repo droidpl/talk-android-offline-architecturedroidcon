@@ -8,35 +8,36 @@ import android.support.v4.content.Loader;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.mobgen.droidcon.offline.sdk.DemoSdk;
+import com.mobgen.droidcon.offline.sdk.models.Comment;
 import com.mobgen.droidcon.offline.sdk.models.Post;
-import com.mobgen.droidcon.offline.sdk.repository.RepositoryException;
 import com.mobgen.droidcon.offline.sdk.sync.SyncService;
 
 import java.util.List;
 
-public class PostLoader extends BaseLoader<List<Post>> {
+public class CommentLoader extends BaseLoader<List<Comment>> {
 
-    private static final int POST_LOADER_ID = 1;
+    private static final int COMMENT_LOADER_ID = 1;
     private DemoSdk mDemoSdk;
     private BroadcastReceiver mObserver;
+    private Post mPost;
 
-    public static void init(@NonNull LoaderManager supportLoaderManager, @NonNull LoaderManager.LoaderCallbacks<List<Post>> callback) {
-        supportLoaderManager.initLoader(POST_LOADER_ID, null, callback);
+    public static void init(@NonNull LoaderManager supportLoaderManager, @NonNull LoaderManager.LoaderCallbacks<List<Comment>> callback) {
+        supportLoaderManager.initLoader(COMMENT_LOADER_ID, null, callback);
     }
 
-    @NonNull
-    public static Loader getLoader(@NonNull LoaderManager supportLoaderManager) {
-        return supportLoaderManager.getLoader(POST_LOADER_ID);
+    public static Loader loader(LoaderManager supportLoaderManager) {
+        return supportLoaderManager.getLoader(COMMENT_LOADER_ID);
     }
 
-    public PostLoader(@NonNull Context context, DemoSdk demoSdk) {
+    public CommentLoader(@NonNull Context context, @NonNull DemoSdk demoSdk, @NonNull Post post) {
         super(context);
         mDemoSdk = demoSdk;
+        mPost = post;
     }
 
     @Override
-    public List<Post> loadInBackground() {
-        setData(mDemoSdk.postRepository().posts());
+    public List<Comment> loadInBackground() {
+        setData(mDemoSdk.postRepository().comments(mPost));
         return getData();
     }
 

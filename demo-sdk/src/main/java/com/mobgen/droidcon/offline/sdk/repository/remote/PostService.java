@@ -36,11 +36,11 @@ public interface PostService {
 
     @NonNull
     @DELETE("/posts/{id}")
-    Call<Void> deletePost(@Path("id") long id);
+    Call<Void> deletePost(@Path("id") Long id);
 
     @NonNull
     @GET("/comments")
-    Call<List<Comment>> comments(@Query("postId") long postId);
+    Call<List<Comment>> comments(@Query("postId") Long postId);
 
     @NonNull
     @POST("/comments")
@@ -52,5 +52,5 @@ public interface PostService {
 
     @NonNull
     @DELETE("/comments/{id}")
-    Call<Void> deleteComment(@Path("id") long id);
+    Call<Void> deleteComment(@Path("id") Long id);
 }

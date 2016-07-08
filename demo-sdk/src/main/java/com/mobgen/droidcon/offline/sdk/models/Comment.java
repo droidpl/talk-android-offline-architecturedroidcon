@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
+import com.google.gson.annotations.SerializedName;
 import com.mobgen.droidcon.offline.sdk.base.AutoGson;
 import com.mobgen.droidcon.offline.sdk.model.db.CommentModel;
 import com.mobgen.droidcon.offline.sdk.models.db.CommentDb;
@@ -19,7 +20,10 @@ public abstract class Comment {
     @Nullable
     public abstract Long id();
 
-    @NonNull
+    @Nullable
+    public abstract Long internalPostId();
+
+    @Nullable
     public abstract Long postId();
 
     @NonNull
@@ -46,6 +50,7 @@ public abstract class Comment {
     public ContentValues marshal() {
         CommentModel.Marshal marshal = CommentDb.FACTORY.marshal()
                 ._remoteId(id())
+                ._internalPostId(internalPostId())
                 ._postId(postId())
                 ._name(name())
                 ._body(body())
@@ -71,6 +76,7 @@ public abstract class Comment {
         return builder()
                 .internalId(comment.internalId())
                 .id(comment.id())
+                .internalPostId(comment.internalPostId())
                 .postId(comment.postId())
                 .name(comment.name())
                 .email(comment.email())
@@ -89,6 +95,10 @@ public abstract class Comment {
         return deletedAt() != null;
     }
 
+    public boolean isStoredLocally() {
+        return internalId() != null;
+    }
+
     @AutoValue.Builder
     public static abstract class Builder {
 
@@ -96,10 +106,13 @@ public abstract class Comment {
         public abstract Builder internalId(@Nullable Long id);
 
         @NonNull
+        public abstract Builder internalPostId(@Nullable Long internalPostId);
+
+        @NonNull
         public abstract Builder id(@Nullable Long id);
 
         @NonNull
-        public abstract Builder postId(@NonNull Long postId);
+        public abstract Builder postId(@Nullable Long postId);
 
         @NonNull
         public abstract Builder name(@NonNull String name);

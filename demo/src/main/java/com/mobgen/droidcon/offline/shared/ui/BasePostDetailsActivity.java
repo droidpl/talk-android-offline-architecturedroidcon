@@ -14,19 +14,24 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.mobgen.droidcon.offline.R;
+import com.mobgen.droidcon.offline.sdk.models.Comment;
 import com.mobgen.droidcon.offline.sdk.models.Post;
+import com.mobgen.droidcon.offline.shared.adapters.PostAdapter;
 import com.mobgen.droidcon.offline.shared.utils.NetworkMonitor;
 import com.mobgen.droidcon.offline.shared.adapters.CommentAdapter;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public abstract class BasePostDetailsActivity extends AppCompatActivity implements View.OnClickListener, NetworkMonitor.ConnectivityListener, SwipeRefreshLayout.OnRefreshListener, NewCommentDialogFragment.NewCommentListener {
+public abstract class BasePostDetailsActivity extends AppCompatActivity implements View.OnClickListener, NetworkMonitor.ConnectivityListener, SwipeRefreshLayout.OnRefreshListener, NewCommentDialogFragment.NewCommentListener, CommentAdapter.CommentListener {
 
     protected static final String BUNDLE_POST_ARGUMENT = "post_argument";
     private static final String DIALOG_CREATE_TAG = "create_post_dialog";
 
     private NetworkMonitor mNetworkMonitor;
+    private CommentAdapter mAdapter;
 
     @BindView(R.id.rv_list)
     protected RecyclerView mRecyclerView;
@@ -111,8 +116,17 @@ public abstract class BasePostDetailsActivity extends AppCompatActivity implemen
         }
     }
 
-    public void setAdapter(@NonNull CommentAdapter adapter) {
-        mRecyclerView.setAdapter(adapter);
+    public void setAdapter(@Nullable CommentAdapter adapter) {
+        mAdapter = adapter;
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
+    public void setAdapter(@Nullable List<Comment> comments) {
+        if(mAdapter != null){
+            mAdapter.comments(comments);
+        }else{
+            setAdapter(new CommentAdapter(mCurrentPost, comments, this));
+        }
     }
 
     private void onAddNewPressed() {

@@ -36,7 +36,7 @@ public class PostRepository {
     }
 
     @WorkerThread
-    public List<Post> posts() throws RepositoryException {
+    public List<Post> posts() {
         List<Post> posts;
         try {
             Response<List<Post>> postsResponse = mPostService.posts().execute();
@@ -45,9 +45,8 @@ public class PostRepository {
                 posts = postsResponse.body();
                 mPostDao.deleteAll();
                 mPostDao.save(posts);
-            } else {
-                posts = mPostDao.posts();
             }
+            posts = mPostDao.posts();
         } catch (IOException e) {
             posts = mPostDao.posts();
         } catch (DatabaseManager.DatabaseException e) {
@@ -60,10 +59,10 @@ public class PostRepository {
     public void localDelete(@NonNull Post post) throws RepositoryException {
         try {
             long now = new Date().getTime();
-            if(post.isNew() && post.isStoredLocally()){
+            if (post.isNew() && post.isStoredLocally()) {
                 mPostDao.delete(post.internalId());
                 SyncService.notifyChange(mContext);
-            }else {
+            } else {
                 mPostDao.save(Post.builder(post)
                         .deletedAt(now)
                         .updatedAt(now)
@@ -92,12 +91,12 @@ public class PostRepository {
 
     @WorkerThread
     public void remoteCreate(@NonNull Post post) throws DatabaseManager.DatabaseException, IOException {
-        //Remove the internal id
+        //Remove the internal remoteId
         Response<Post> postResponse = mPostService.create(Post.builder(post)
                 .internalId(null)
                 .build()).execute();
         if (postResponse.isSuccessful()) {
-            //Add the internal id again
+            //Add the internal remoteId again
             mPostDao.save(Post.builder(postResponse.body())
                     .internalId(post.internalId())
                     .build());
@@ -106,8 +105,8 @@ public class PostRepository {
 
     @WorkerThread
     public void remoteDelete(@NonNull Post post) throws IOException, DatabaseManager.DatabaseException {
-        if (mPostService.deletePost(post.id()).execute().isSuccessful()) {
-            mPostDao.delete(post.id());
+        if (mPostService.deletePost(post.id()).execute().isSuccessful() && post.isStoredLocally()) {
+            mPostDao.delete(post.internalId());
         }
     }
 
@@ -116,17 +115,18 @@ public class PostRepository {
     public List<Comment> comments(@NonNull Post post) {
         List<Comment> comments;
         try {
-            Response<List<Comment>> commentsResponse = mPostService.comments(post.id()).execute();
-            //Consume response
-            if (commentsResponse.isSuccessful()) {
-                comments = commentsResponse.body();
-                mCommentDao.delete(post.id());
-                mCommentDao.save(comments);
-            } else {
-                comments = mCommentDao.comments(post.id());
+            if (!post.isNew()) {
+                Response<List<Comment>> commentsResponse = mPostService.comments(post.id()).execute();
+                //Consume response
+                if (commentsResponse.isSuccessful()) {
+                    comments = commentsResponse.body();
+                    mCommentDao.delete(post.internalId());
+                    mCommentDao.save(post, comments);
+                }
             }
+            comments = mCommentDao.comments(post.internalId());
         } catch (IOException e) {
-            comments = mCommentDao.comments(post.id());
+            comments = mCommentDao.comments(post.internalId());
         } catch (DatabaseManager.DatabaseException e) {
             comments = null;
         }
@@ -141,10 +141,10 @@ public class PostRepository {
     @WorkerThread
     public void localDelete(@NonNull Comment comment) throws RepositoryException {
         try {
-            if(comment.isNew()){
-                mCommentDao.delete(comment.id());
+            if (comment.isNew() && comment.isStoredLocally()) {
+                mCommentDao.delete(comment.internalId());
                 SyncService.notifyChange(mContext);
-            }else {
+            } else {
                 long now = new Date().getTime();
                 mCommentDao.save(Comment.builder(comment)
                         .deletedAt(now)
@@ -169,16 +169,23 @@ public class PostRepository {
 
     @WorkerThread
     public void remoteCreate(@NonNull Comment comment) throws DatabaseManager.DatabaseException, IOException {
-        Response<Comment> postResponse = mPostService.create(comment).execute();
-        if (postResponse.isSuccessful()) {
-            mCommentDao.save(postResponse.body());
+        //Remove the internal remoteId
+        Response<Comment> commentResponse = mPostService.create(Comment.builder(comment)
+                .internalId(null)
+                .internalPostId(null)
+                .build()).execute();
+        if (commentResponse.isSuccessful()) {
+            //Add the internal remoteId again
+            mCommentDao.save(Comment.builder(commentResponse.body())
+                    .internalId(comment.internalId())
+                    .build());
         }
     }
 
     @WorkerThread
     public void remoteDelete(@NonNull Comment comment) throws IOException, DatabaseManager.DatabaseException {
-        if (mPostService.deletePost(comment.id()).execute().isSuccessful()) {
-            mCommentDao.delete(comment.id());
+        if (mPostService.deleteComment(comment.id()).execute().isSuccessful() && comment.isStoredLocally()) {
+            mCommentDao.delete(comment.internalId());
         }
     }
 

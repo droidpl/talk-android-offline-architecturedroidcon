@@ -109,7 +109,6 @@ public abstract class BasePostActivity extends AppCompatActivity implements Swip
         }else{
             setAdapter(new PostAdapter(posts, this));
         }
-
     }
 
     @Override

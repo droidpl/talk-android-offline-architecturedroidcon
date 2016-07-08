@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.mobgen.droidcon.offline.R;
 import com.mobgen.droidcon.offline.sdk.models.Comment;
 import com.mobgen.droidcon.offline.sdk.models.Post;
+import com.mobgen.droidcon.offline.shared.ui.BasePostDetailsActivity;
 
 import java.util.List;
 
@@ -26,11 +27,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     private List<Comment> mComments;
     private CommentListener mCallback;
 
-    public CommentAdapter(@NonNull Post post, @NonNull List<Comment> comments, @NonNull CommentListener callback) {
+    public CommentAdapter(@NonNull Post post, @Nullable List<Comment> comments, @NonNull CommentListener callback) {
         mPost = post;
         mComments = comments;
         mCallback = callback;
     }
+
+
 
     @Override
     public CommentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -67,6 +70,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             return VIEW_TYPE_POST;
         }
         return VIEW_TYPE_COMMENT;
+    }
+
+    public void comments(@Nullable List<Comment> comments) {
+        mComments = comments;
+        notifyDataSetChanged();
     }
 
     public class CommentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
