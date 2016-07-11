@@ -5,7 +5,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v4.content.LocalBroadcastManager;
 
 import com.mobgen.droidcon.offline.sdk.DemoSdk;
 import com.mobgen.droidcon.offline.sdk.models.Comment;

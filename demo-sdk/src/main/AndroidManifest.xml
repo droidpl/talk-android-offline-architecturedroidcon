@@ -6,9 +6,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true">
 
-        <service android:name=".sync.SyncService"
+        <service
+            android:name=".sync.SyncService"
             android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="true"/>
+            android:exported="true" />
     </application>
 
 </manifest>

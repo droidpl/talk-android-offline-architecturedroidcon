@@ -21,5 +21,5 @@ selectCommentsPost:
 deleteComment:
     DELETE FROM comment_db WHERE _id = ?;
 deleteCommentsByPost:
-    DELETE FROM comment_db WHERE _postId = ?;
+    DELETE FROM comment_db WHERE _internalPostId = ?;
 

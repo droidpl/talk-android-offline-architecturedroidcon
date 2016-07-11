@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/TextAppearance.AppCompat.Large"
-                android:text="@string/online_mode"/>
+                android:text="@string/online_mode" />
         </LinearLayout>
 
         <LinearLayout
@@ -38,7 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/TextAppearance.AppCompat.Large"
-                android:text="@string/online_and_offline_mode"/>
+                android:text="@string/online_and_offline_mode" />
         </LinearLayout>
 
     </LinearLayout>

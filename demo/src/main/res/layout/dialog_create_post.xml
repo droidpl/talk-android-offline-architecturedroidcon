@@ -9,20 +9,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/title_create_post"
-        style="@style/Base.TextAppearance.AppCompat.Title"/>
+        style="@style/Base.TextAppearance.AppCompat.Title" />
 
     <EditText
         android:id="@+id/et_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:hint="@string/hint_title"/>
+        android:hint="@string/hint_title" />
 
     <EditText
         android:id="@+id/et_body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/hint_body"
-        android:lines="3"/>
+        android:lines="3" />
 
 </LinearLayout>

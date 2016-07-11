@@ -2,6 +2,7 @@ package com.mobgen.droidcon.offline.shared.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +12,6 @@ import android.widget.TextView;
 import com.mobgen.droidcon.offline.R;
 import com.mobgen.droidcon.offline.sdk.models.Comment;
 import com.mobgen.droidcon.offline.sdk.models.Post;
-import com.mobgen.droidcon.offline.shared.ui.BasePostDetailsActivity;
 
 import java.util.List;
 
@@ -32,7 +32,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         mComments = comments;
         mCallback = callback;
     }
-
 
 
     @Override
@@ -100,6 +99,14 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             mBody.setText(post.body());
             //Do not show the remove for this view
             mRemoveButton.setVisibility(View.GONE);
+            int commentColor = R.color.white;
+            if (post.isNew()) {
+                commentColor = R.color.colorAccent;
+            } else if (post.isDeleted()) {
+                commentColor = R.color.deletedColor;
+            }
+            int color = ContextCompat.getColor(itemView.getContext(), commentColor);
+            itemView.setBackgroundColor(color);
         }
 
         public void bind(@NonNull Comment comment) {
@@ -108,6 +115,16 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             }
             mTitle.setText(comment.name());
             mBody.setText(comment.body());
+            int commentColor = R.color.white;
+            mRemoveButton.setVisibility(View.VISIBLE);
+            if (comment.isNew()) {
+                commentColor = R.color.colorAccent;
+            } else if (comment.isDeleted()) {
+                commentColor = R.color.deletedColor;
+                mRemoveButton.setVisibility(View.GONE);
+            }
+            int color = ContextCompat.getColor(itemView.getContext(), commentColor);
+            itemView.setBackgroundColor(color);
         }
 
         @Override

@@ -14,7 +14,6 @@ import android.support.v4.content.Loader;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.mobgen.droidcon.offline.sdk.DemoSdk;
-import com.mobgen.droidcon.offline.sdk.sync.loaders.CommentLoader;
 
 public class SyncService extends JobService {
 
@@ -32,7 +31,7 @@ public class SyncService extends JobService {
         jobScheduler.schedule(info);
     }
 
-    public static BroadcastReceiver listenForUpdates(@NonNull Loader loader){
+    public static BroadcastReceiver listenForUpdates(@NonNull Loader loader) {
         IntentFilter filter = new IntentFilter(CHANGE_SYNC_INTENT_ACTION);
         SyncServiceReceiver receiver = new SyncServiceReceiver(loader);
         LocalBroadcastManager.getInstance(loader.getContext()).registerReceiver(receiver, filter);
@@ -79,7 +78,7 @@ public class SyncService extends JobService {
 
         private Loader mLoader;
 
-        private SyncServiceReceiver(@NonNull Loader loader){
+        private SyncServiceReceiver(@NonNull Loader loader) {
             mLoader = loader;
         }
 

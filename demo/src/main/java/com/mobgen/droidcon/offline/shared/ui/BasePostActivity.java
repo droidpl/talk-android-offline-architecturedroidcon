@@ -1,7 +1,6 @@
 package com.mobgen.droidcon.offline.shared.ui;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,8 +12,8 @@ import android.view.View;
 
 import com.mobgen.droidcon.offline.R;
 import com.mobgen.droidcon.offline.sdk.models.Post;
-import com.mobgen.droidcon.offline.shared.utils.NetworkMonitor;
 import com.mobgen.droidcon.offline.shared.adapters.PostAdapter;
+import com.mobgen.droidcon.offline.shared.utils.NetworkMonitor;
 
 import java.util.List;
 
@@ -104,9 +103,9 @@ public abstract class BasePostActivity extends AppCompatActivity implements Swip
     }
 
     public void setAdapter(@Nullable List<Post> posts) {
-        if(mAdapter != null){
+        if (mAdapter != null) {
             mAdapter.posts(posts);
-        }else{
+        } else {
             setAdapter(new PostAdapter(posts, this));
         }
     }

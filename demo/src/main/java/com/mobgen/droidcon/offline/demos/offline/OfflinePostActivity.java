@@ -22,12 +22,12 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class OfflinePostActivity extends BasePostActivity implements LoaderManager.LoaderCallbacks<List<Post>>,PostAdapter.PostListener {
+public class OfflinePostActivity extends BasePostActivity implements LoaderManager.LoaderCallbacks<List<Post>>, PostAdapter.PostListener {
 
     private PostRepository mRepository;
     private Executor mExecutor;
 
-    public static void start(@NonNull Context context){
+    public static void start(@NonNull Context context) {
         Intent intent = new Intent(context, OfflinePostActivity.class);
         context.startActivity(intent);
     }
@@ -71,6 +71,7 @@ public class OfflinePostActivity extends BasePostActivity implements LoaderManag
 
     @Override
     public void onPostCreated(@NonNull final Post post) {
+        startLoading();
         mExecutor.execute(new Runnable() {
             @Override
             public void run() {
@@ -85,12 +86,12 @@ public class OfflinePostActivity extends BasePostActivity implements LoaderManag
 
     @Override
     public void onDeleted(@NonNull final Post post, int position) {
+        startLoading();
         mExecutor.execute(new Runnable() {
             @Override
             public void run() {
                 try {
                     mRepository.localDelete(post);
-                    onRefresh();
                 } catch (RepositoryException e) {
                     showError();
                 }
@@ -98,7 +99,7 @@ public class OfflinePostActivity extends BasePostActivity implements LoaderManag
         });
     }
 
-    public void showError(){
+    public void showError() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

@@ -24,9 +24,9 @@
 
         <activity android:name=".demos.online.OnlinePostDetailsActivity" />
 
-        <activity android:name=".demos.offline.OfflinePostActivity"/>
+        <activity android:name=".demos.offline.OfflinePostActivity" />
 
-        <activity android:name=".demos.offline.OfflinePostDetailsActivity"/>
+        <activity android:name=".demos.offline.OfflinePostDetailsActivity" />
     </application>
 
 </manifest>

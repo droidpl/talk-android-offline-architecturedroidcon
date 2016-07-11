@@ -94,6 +94,7 @@ public class PostRepository {
         //Remove the internal remoteId
         Response<Post> postResponse = mPostService.create(Post.builder(post)
                 .internalId(null)
+                .needsSync(false)
                 .build()).execute();
         if (postResponse.isSuccessful()) {
             //Add the internal remoteId again
@@ -106,6 +107,9 @@ public class PostRepository {
     @WorkerThread
     public void remoteDelete(@NonNull Post post) throws IOException, DatabaseManager.DatabaseException {
         if (mPostService.deletePost(post.id()).execute().isSuccessful() && post.isStoredLocally()) {
+            for (Comment comment : mCommentDao.comments(post.internalId())) {
+                remoteDelete(comment);
+            }
             mPostDao.delete(post.internalId());
         }
     }
@@ -120,7 +124,7 @@ public class PostRepository {
                 //Consume response
                 if (commentsResponse.isSuccessful()) {
                     comments = commentsResponse.body();
-                    mCommentDao.delete(post.internalId());
+                    mCommentDao.deleteFromPost(post);
                     mCommentDao.save(post, comments);
                 }
             }
@@ -173,11 +177,13 @@ public class PostRepository {
         Response<Comment> commentResponse = mPostService.create(Comment.builder(comment)
                 .internalId(null)
                 .internalPostId(null)
+                .needsSync(false)
                 .build()).execute();
         if (commentResponse.isSuccessful()) {
             //Add the internal remoteId again
             mCommentDao.save(Comment.builder(commentResponse.body())
                     .internalId(comment.internalId())
+                    .internalPostId(comment.internalPostId())
                     .build());
         }
     }

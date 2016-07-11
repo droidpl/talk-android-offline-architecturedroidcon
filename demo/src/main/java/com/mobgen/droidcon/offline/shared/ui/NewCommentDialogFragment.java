@@ -69,7 +69,7 @@ public class NewCommentDialogFragment extends DialogFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Bundle arguments = getArguments();
-        if(arguments == null){
+        if (arguments == null) {
             throw new IllegalArgumentException("You must use the create method");
         }
         mPost = arguments.getParcelable(BUNDLE_POST);
@@ -79,10 +79,11 @@ public class NewCommentDialogFragment extends DialogFragment {
         Date now = new Date();
         Comment comment = Comment.builder()
                 .id(null)
+                .internalPostId(mPost.internalId())
+                .postId(mPost.id())
                 .name(mTitle.getText().toString())
                 .body(mBody.getText().toString())
                 .email(mEmail.getText().toString())
-                .postId(mPost.id())
                 .createdAt(now.getTime())
                 .needsSync(true)
                 .build();

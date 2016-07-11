@@ -14,7 +14,6 @@ import com.mobgen.droidcon.offline.sdk.repository.remote.PostService;
 import com.mobgen.droidcon.offline.shared.adapters.CommentAdapter;
 import com.mobgen.droidcon.offline.shared.ui.BasePostDetailsActivity;
 
-
 import java.util.List;
 
 import retrofit2.Call;

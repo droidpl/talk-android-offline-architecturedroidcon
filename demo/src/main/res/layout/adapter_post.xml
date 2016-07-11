@@ -35,7 +35,7 @@
             android:layout_gravity="end"
             android:padding="@dimen/default_padding"
             android:scaleType="fitCenter"
-            android:background="?attr/selectableItemBackgroundBorderless"/>
+            android:background="?attr/selectableItemBackgroundBorderless" />
 
     </LinearLayout>
 

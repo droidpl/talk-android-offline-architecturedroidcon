@@ -85,7 +85,7 @@ public class PostDAO {
 
     @WorkerThread
     public void delete(@Nullable final Long internalId) throws DatabaseManager.DatabaseException {
-        if(internalId != null) {
+        if (internalId != null) {
             mDatabaseManager.transaction(new DatabaseManager.Transaction() {
                 @Override
                 public void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseManager.DatabaseException {

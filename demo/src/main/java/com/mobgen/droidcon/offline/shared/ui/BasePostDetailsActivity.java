@@ -3,7 +3,6 @@ package com.mobgen.droidcon.offline.shared.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,9 +15,8 @@ import android.view.View;
 import com.mobgen.droidcon.offline.R;
 import com.mobgen.droidcon.offline.sdk.models.Comment;
 import com.mobgen.droidcon.offline.sdk.models.Post;
-import com.mobgen.droidcon.offline.shared.adapters.PostAdapter;
-import com.mobgen.droidcon.offline.shared.utils.NetworkMonitor;
 import com.mobgen.droidcon.offline.shared.adapters.CommentAdapter;
+import com.mobgen.droidcon.offline.shared.utils.NetworkMonitor;
 
 import java.util.List;
 
@@ -122,9 +120,9 @@ public abstract class BasePostDetailsActivity extends AppCompatActivity implemen
     }
 
     public void setAdapter(@Nullable List<Comment> comments) {
-        if(mAdapter != null){
+        if (mAdapter != null) {
             mAdapter.comments(comments);
-        }else{
+        } else {
             setAdapter(new CommentAdapter(mCurrentPost, comments, this));
         }
     }

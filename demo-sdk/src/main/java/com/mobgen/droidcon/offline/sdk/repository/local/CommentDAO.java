@@ -9,7 +9,6 @@ import android.util.Log;
 
 import com.mobgen.droidcon.offline.sdk.base.DatabaseManager;
 import com.mobgen.droidcon.offline.sdk.model.db.CommentModel;
-import com.mobgen.droidcon.offline.sdk.model.db.PostModel;
 import com.mobgen.droidcon.offline.sdk.models.Comment;
 import com.mobgen.droidcon.offline.sdk.models.Post;
 import com.mobgen.droidcon.offline.sdk.models.db.CommentDb;
@@ -66,9 +65,9 @@ public class CommentDAO {
                 for (Comment comment : comments) {
                     database.insertWithOnConflict(CommentModel.TABLE_NAME, null,
                             Comment.builder(comment)
-                                .internalPostId(post.internalId())
-                                .build()
-                                .marshal(), SQLiteDatabase.CONFLICT_REPLACE);
+                                    .internalPostId(post.internalId())
+                                    .build()
+                                    .marshal(), SQLiteDatabase.CONFLICT_REPLACE);
                 }
             }
         });
@@ -97,7 +96,19 @@ public class CommentDAO {
             mDatabaseManager.transaction(new DatabaseManager.Transaction() {
                 @Override
                 public void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseManager.DatabaseException {
-                    database.execSQL(PostModel.DELETEPOST, new Long[]{commentId});
+                    database.execSQL(CommentModel.DELETECOMMENT, new Long[]{commentId});
+                }
+            });
+        }
+    }
+
+    @WorkerThread
+    public void deleteFromPost(@Nullable final Post post) throws DatabaseManager.DatabaseException {
+        if (post != null) {
+            mDatabaseManager.transaction(new DatabaseManager.Transaction() {
+                @Override
+                public void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseManager.DatabaseException {
+                    database.execSQL(CommentModel.DELETECOMMENTSBYPOST, new Long[]{post.internalId()});
                 }
             });
         }
