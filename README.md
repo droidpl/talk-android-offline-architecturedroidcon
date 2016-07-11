@@ -36,7 +36,7 @@ cd server
 sh start.sh
 ```
 
-Copy tour local IP address into the build.gradle of the application and run the app.
+Copy your local IP address into the build.gradle of the application and run the app.
 
 # License
 ```
