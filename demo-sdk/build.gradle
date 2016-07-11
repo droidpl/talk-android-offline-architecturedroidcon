@@ -2,6 +2,8 @@ apply plugin: 'com.android.library'
 apply plugin: 'android-apt'
 apply plugin: 'com.squareup.sqldelight'
 
+def ipAddress = "\"http://192.168.16.134:3000\""
+
 android {
     compileSdkVersion 23
     buildToolsVersion "24.0.0"
@@ -11,7 +13,7 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
-        buildConfigField "String", "SERVER_URL", "\"http://192.168.16.134:3000\""
+        buildConfigField "String", "SERVER_URL", "${ipAddress}"
     }
     buildTypes {
         release {

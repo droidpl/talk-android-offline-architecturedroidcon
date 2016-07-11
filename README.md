@@ -28,6 +28,16 @@ Link to presentation (Pending)
 
 Link to video (Pending)
 
+# How to start it?
+
+*Preconditions*: Make sure you have node.js installed and in your command line available
+```
+cd server
+sh start.sh
+```
+
+Copy tour local IP address into the build.gradle of the application and run the app.
+
 # License
 ```
 Copyright [2016] [Javier de Pedro López]
