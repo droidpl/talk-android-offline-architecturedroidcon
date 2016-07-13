@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'android-apt'
 apply plugin: 'com.squareup.sqldelight'
 
-def ipAddress = "\"http://192.168.16.134:3000\""
+def ipAddress = "\"http://192.168.16.124:3000\""
 
 android {
     compileSdkVersion 23

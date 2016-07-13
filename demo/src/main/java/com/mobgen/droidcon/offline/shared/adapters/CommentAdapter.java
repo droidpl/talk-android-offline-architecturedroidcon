@@ -101,7 +101,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             mRemoveButton.setVisibility(View.GONE);
             int commentColor = R.color.white;
             if (post.isNew()) {
-                commentColor = R.color.colorAccent;
+                commentColor = R.color.addedColor;
             } else if (post.isDeleted()) {
                 commentColor = R.color.deletedColor;
             }
@@ -118,7 +118,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             int commentColor = R.color.white;
             mRemoveButton.setVisibility(View.VISIBLE);
             if (comment.isNew()) {
-                commentColor = R.color.colorAccent;
+                commentColor = R.color.addedColor;
             } else if (comment.isDeleted()) {
                 commentColor = R.color.deletedColor;
                 mRemoveButton.setVisibility(View.GONE);

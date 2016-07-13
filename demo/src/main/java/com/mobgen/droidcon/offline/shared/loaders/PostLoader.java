@@ -1,4 +1,4 @@
-package com.mobgen.droidcon.offline.sdk.sync.loaders;
+package com.mobgen.droidcon.offline.shared.loaders;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

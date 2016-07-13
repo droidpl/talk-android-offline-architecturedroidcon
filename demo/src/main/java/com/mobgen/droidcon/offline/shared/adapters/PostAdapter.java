@@ -77,7 +77,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             mDelete.setVisibility(View.VISIBLE);
             int colorPost = R.color.white;
             if (post.isNew()) {
-                colorPost = R.color.colorAccent;
+                colorPost = R.color.addedColor;
             } else if (post.isDeleted()) {
                 colorPost = R.color.deletedColor;
                 mDelete.setVisibility(View.GONE);

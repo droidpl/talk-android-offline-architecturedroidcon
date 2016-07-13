@@ -14,7 +14,7 @@ import com.mobgen.droidcon.offline.sdk.models.Comment;
 import com.mobgen.droidcon.offline.sdk.models.Post;
 import com.mobgen.droidcon.offline.sdk.repository.PostRepository;
 import com.mobgen.droidcon.offline.sdk.repository.RepositoryException;
-import com.mobgen.droidcon.offline.sdk.sync.loaders.CommentLoader;
+import com.mobgen.droidcon.offline.shared.loaders.CommentLoader;
 import com.mobgen.droidcon.offline.shared.ui.BasePostDetailsActivity;
 
 import java.util.List;

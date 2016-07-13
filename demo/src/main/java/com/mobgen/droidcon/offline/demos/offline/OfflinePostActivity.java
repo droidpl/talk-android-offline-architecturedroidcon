@@ -14,7 +14,7 @@ import com.mobgen.droidcon.offline.R;
 import com.mobgen.droidcon.offline.sdk.models.Post;
 import com.mobgen.droidcon.offline.sdk.repository.PostRepository;
 import com.mobgen.droidcon.offline.sdk.repository.RepositoryException;
-import com.mobgen.droidcon.offline.sdk.sync.loaders.PostLoader;
+import com.mobgen.droidcon.offline.shared.loaders.PostLoader;
 import com.mobgen.droidcon.offline.shared.adapters.PostAdapter;
 import com.mobgen.droidcon.offline.shared.ui.BasePostActivity;
 
