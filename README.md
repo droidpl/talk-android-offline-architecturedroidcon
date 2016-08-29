@@ -22,11 +22,11 @@ from ```LocalBroadcastManager``` and the job scheduler (or a similar library).
 The flow basically goes from an activity to the repository which notifies accordingly
 the loader to reload the data. This way the synchronization is easier, as well as
 the complete data flow. Please have a look to the code for more details or
-the presentation done in the Droidcon Spain '16 ***(Pending video and presentation)***.
+the presentation done in the Droidcon Spain '16.
 
-Link to presentation (Pending)
+[Link to presentation](http://www.slideshare.net/JavierdePedroLpez/droidcon-es-16-how-to-fail-going-offline)
 
-Link to video (Pending)
+[Link to video](https://www.youtube.com/watch?v=HE4eaiipl4I)
 
 # How to start it?
 
