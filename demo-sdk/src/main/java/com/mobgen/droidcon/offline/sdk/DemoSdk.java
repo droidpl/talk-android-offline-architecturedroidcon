@@ -3,27 +3,20 @@ package com.mobgen.droidcon.offline.sdk;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.mobgen.droidcon.offline.sdk.repository.PostRepository;
-import com.mobgen.droidcon.offline.sdk.repository.remote.PostService;
+import com.mobgen.droidcon.offline.sdk.repository.DataStore;
 
-public interface DemoSdk {
-    PostRepository postRepository();
+public class DemoSdk {
 
-    PostService postService();
+    private static DataStore sInstance;
 
-    class Factory {
-
-        private static DemoSdk sInstance;
-
-        public static synchronized DemoSdk init(@NonNull Context context) {
-            if (sInstance == null) {
-                sInstance = new DemoSdkImpl(context.getApplicationContext());
-            }
-            return sInstance;
+    public static synchronized DataStore init(@NonNull Context context) {
+        if (sInstance == null) {
+            sInstance = new DemoSdkImpl(context.getApplicationContext());
         }
+        return sInstance;
+    }
 
-        public static DemoSdk instance() {
-            return sInstance;
-        }
+    public static DataStore instance() {
+        return sInstance;
     }
 }

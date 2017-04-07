@@ -12,6 +12,7 @@ import android.support.v4.content.Loader;
 import com.mobgen.droidcon.offline.DemosApplication;
 import com.mobgen.droidcon.offline.R;
 import com.mobgen.droidcon.offline.sdk.models.Post;
+import com.mobgen.droidcon.offline.sdk.repository.DataStore;
 import com.mobgen.droidcon.offline.sdk.repository.PostRepository;
 import com.mobgen.droidcon.offline.sdk.repository.RepositoryException;
 import com.mobgen.droidcon.offline.shared.loaders.PostLoader;
@@ -22,9 +23,10 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class OfflinePostActivity extends BasePostActivity implements LoaderManager.LoaderCallbacks<List<Post>>, PostAdapter.PostListener {
+public class OfflinePostActivity extends BasePostActivity
+        implements LoaderManager.LoaderCallbacks<List<Post>>, PostAdapter.PostListener {
 
-    private PostRepository mRepository;
+    private DataStore mRepository;
     private Executor mExecutor;
 
     public static void start(@NonNull Context context) {
@@ -36,7 +38,7 @@ public class OfflinePostActivity extends BasePostActivity implements LoaderManag
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(R.string.title_offline_post_list);
-        mRepository = DemosApplication.instance().demoSdk().postRepository();
+        mRepository = DemosApplication.instance().demoSdk();
         mExecutor = Executors.newSingleThreadExecutor();
         startLoading();
         PostLoader.init(getSupportLoaderManager(), this);

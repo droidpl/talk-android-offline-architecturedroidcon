@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 import android.util.Log;
 
+import com.mobgen.droidcon.offline.sdk.base.DatabaseException;
 import com.mobgen.droidcon.offline.sdk.base.DatabaseManager;
 import com.mobgen.droidcon.offline.sdk.model.db.CommentModel;
 import com.mobgen.droidcon.offline.sdk.model.db.PostModel;
@@ -25,20 +26,20 @@ public class PostDAO {
     }
 
     @WorkerThread
-    public void save(@NonNull final Post post) throws DatabaseManager.DatabaseException {
+    public void save(@NonNull final Post post) throws DatabaseException {
         mDatabaseManager.transaction(new DatabaseManager.Transaction() {
             @Override
-            public void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseManager.DatabaseException {
+            public void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseException {
                 database.insertWithOnConflict(PostModel.TABLE_NAME, null, post.marshal(), SQLiteDatabase.CONFLICT_REPLACE);
             }
         });
     }
 
     @WorkerThread
-    public void save(@NonNull final List<Post> posts) throws DatabaseManager.DatabaseException {
+    public void save(@NonNull final List<Post> posts) throws DatabaseException {
         mDatabaseManager.transaction(new DatabaseManager.Transaction() {
             @Override
-            public void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseManager.DatabaseException {
+            public void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseException {
                 for (Post post : posts) {
                     database.insertWithOnConflict(PostModel.TABLE_NAME, null, post.marshal(), SQLiteDatabase.CONFLICT_REPLACE);
                 }
@@ -52,7 +53,7 @@ public class PostDAO {
         try {
             mDatabaseManager.transaction(new DatabaseManager.Transaction() {
                 @Override
-                public void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseManager.DatabaseException {
+                public void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseException {
                     try (Cursor cursor = database.rawQuery(PostModel.SELECTPOSTS, null)) {
                         while (cursor.moveToNext()) {
                             posts.add(PostDb.ALL_POSTS_MAPPER.map(cursor).asModel());
@@ -60,7 +61,7 @@ public class PostDAO {
                     }
                 }
             });
-        } catch (DatabaseManager.DatabaseException e) {
+        } catch (DatabaseException e) {
             Log.e("Database", "Error in the database", e);
         }
         return posts;
@@ -68,11 +69,11 @@ public class PostDAO {
 
     @WorkerThread
     @NonNull
-    public List<Post> postsPendingToSync() throws DatabaseManager.DatabaseException {
+    public List<Post> postsPendingToSync() throws DatabaseException {
         final List<Post> posts = new ArrayList<>();
         mDatabaseManager.transaction(new DatabaseManager.Transaction() {
             @Override
-            public void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseManager.DatabaseException {
+            public void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseException {
                 try (Cursor cursor = database.rawQuery(PostModel.SELECTSYNCPOSTS, null)) {
                     while (cursor.moveToNext()) {
                         posts.add(PostDb.POST_SYNC_MAPPER.map(cursor).asModel());
@@ -84,11 +85,11 @@ public class PostDAO {
     }
 
     @WorkerThread
-    public void delete(@Nullable final Long internalId) throws DatabaseManager.DatabaseException {
+    public void delete(@Nullable final Long internalId) throws DatabaseException {
         if (internalId != null) {
             mDatabaseManager.transaction(new DatabaseManager.Transaction() {
                 @Override
-                public void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseManager.DatabaseException {
+                public void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseException {
                     database.execSQL(CommentModel.DELETECOMMENTSBYPOST, new Long[]{internalId});
                     database.execSQL(PostModel.DELETEPOST, new Long[]{internalId});
                 }
@@ -97,10 +98,10 @@ public class PostDAO {
     }
 
     @WorkerThread
-    public void deleteAll() throws DatabaseManager.DatabaseException {
+    public void deleteAll() throws DatabaseException {
         mDatabaseManager.transaction(new DatabaseManager.Transaction() {
             @Override
-            public void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseManager.DatabaseException {
+            public void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseException {
                 database.execSQL(PostModel.DELETEALL);
             }
         });

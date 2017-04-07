@@ -14,6 +14,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.mobgen.droidcon.offline.sdk.DemoSdk;
+import com.mobgen.droidcon.offline.sdk.repository.DataStore;
 
 public class SyncService extends JobService {
 
@@ -52,7 +53,7 @@ public class SyncService extends JobService {
 
     @Override
     public boolean onStartJob(JobParameters params) {
-        DemoSdk sdk = DemoSdk.Factory.instance();
+        DataStore sdk = DemoSdk.instance();
         boolean willExecute = true;
         //Make sure it is initialized
         if (sdk != null) {

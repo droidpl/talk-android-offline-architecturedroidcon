@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.WorkerThread;
 
-import com.mobgen.droidcon.offline.sdk.base.DatabaseManager;
+import com.mobgen.droidcon.offline.sdk.base.DatabaseException;
 import com.mobgen.droidcon.offline.sdk.models.Comment;
 import com.mobgen.droidcon.offline.sdk.models.Post;
 import com.mobgen.droidcon.offline.sdk.repository.local.CommentDAO;
@@ -18,7 +18,7 @@ import java.util.List;
 
 import retrofit2.Response;
 
-public class PostRepository {
+public class PostRepository implements DataStore {
 
     private Context mContext;
     private PostService mPostService;
@@ -49,7 +49,7 @@ public class PostRepository {
             posts = mPostDao.posts();
         } catch (IOException e) {
             posts = mPostDao.posts();
-        } catch (DatabaseManager.DatabaseException e) {
+        } catch (DatabaseException e) {
             posts = null;
         }
         return posts;
@@ -69,7 +69,7 @@ public class PostRepository {
                         .needsSync(true).build());
                 SyncService.triggerSync(mContext);
             }
-        } catch (DatabaseManager.DatabaseException e) {
+        } catch (DatabaseException e) {
             throw new RepositoryException("Repository: Error saving post", e);
         }
     }
@@ -79,18 +79,18 @@ public class PostRepository {
         try {
             mPostDao.save(post);
             SyncService.triggerSync(mContext);
-        } catch (DatabaseManager.DatabaseException e) {
+        } catch (DatabaseException e) {
             throw new RepositoryException("Repository: Error saving post", e);
         }
     }
 
     @WorkerThread
-    public List<Post> localPendingPosts() throws DatabaseManager.DatabaseException {
+    public List<Post> localPendingPosts() throws DatabaseException {
         return mPostDao.postsPendingToSync();
     }
 
     @WorkerThread
-    public void remoteCreate(@NonNull Post post) throws DatabaseManager.DatabaseException, IOException {
+    public void remoteCreate(@NonNull Post post) throws DatabaseException, IOException {
         //Remove the internal remoteId
         Response<Post> postResponse = mPostService.create(Post.builder(post)
                 .internalId(null)
@@ -105,7 +105,7 @@ public class PostRepository {
     }
 
     @WorkerThread
-    public void remoteDelete(@NonNull Post post) throws IOException, DatabaseManager.DatabaseException {
+    public void remoteDelete(@NonNull Post post) throws IOException, DatabaseException {
         if (mPostService.deletePost(post.id()).execute().isSuccessful() && post.isStoredLocally()) {
             for (Comment comment : mCommentDao.comments(post.internalId())) {
                 remoteDelete(comment);
@@ -131,14 +131,14 @@ public class PostRepository {
             comments = mCommentDao.comments(post.internalId());
         } catch (IOException e) {
             comments = mCommentDao.comments(post.internalId());
-        } catch (DatabaseManager.DatabaseException e) {
+        } catch (DatabaseException e) {
             comments = null;
         }
         return comments;
     }
 
     @WorkerThread
-    public List<Comment> localPendingComments() throws DatabaseManager.DatabaseException {
+    public List<Comment> localPendingComments() throws DatabaseException {
         return mCommentDao.commentsPendingToSync();
     }
 
@@ -156,7 +156,7 @@ public class PostRepository {
                         .needsSync(true).build());
                 SyncService.triggerSync(mContext);
             }
-        } catch (DatabaseManager.DatabaseException e) {
+        } catch (DatabaseException e) {
             throw new RepositoryException("Repository: Error saving post", e);
         }
     }
@@ -166,13 +166,13 @@ public class PostRepository {
         try {
             mCommentDao.save(comment);
             SyncService.triggerSync(mContext);
-        } catch (DatabaseManager.DatabaseException e) {
+        } catch (DatabaseException e) {
             throw new RepositoryException("Repository: Error saving post", e);
         }
     }
 
     @WorkerThread
-    public void remoteCreate(@NonNull Comment comment) throws DatabaseManager.DatabaseException, IOException {
+    public void remoteCreate(@NonNull Comment comment) throws DatabaseException, IOException {
         //Remove the internal remoteId
         Response<Comment> commentResponse = mPostService.create(Comment.builder(comment)
                 .internalId(null)
@@ -189,13 +189,9 @@ public class PostRepository {
     }
 
     @WorkerThread
-    public void remoteDelete(@NonNull Comment comment) throws IOException, DatabaseManager.DatabaseException {
+    public void remoteDelete(@NonNull Comment comment) throws IOException, DatabaseException {
         if (mPostService.deleteComment(comment.id()).execute().isSuccessful() && comment.isStoredLocally()) {
             mCommentDao.delete(comment.internalId());
         }
-    }
-
-    public PostService postService() {
-        return mPostService;
     }
 }

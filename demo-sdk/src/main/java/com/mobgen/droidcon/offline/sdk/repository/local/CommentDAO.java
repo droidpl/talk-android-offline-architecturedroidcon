@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 import android.util.Log;
 
+import com.mobgen.droidcon.offline.sdk.base.DatabaseException;
 import com.mobgen.droidcon.offline.sdk.base.DatabaseManager;
 import com.mobgen.droidcon.offline.sdk.model.db.CommentModel;
 import com.mobgen.droidcon.offline.sdk.models.Comment;
@@ -31,7 +32,7 @@ public class CommentDAO {
             try {
                 mDatabaseManager.transaction(new DatabaseManager.Transaction() {
                     @Override
-                    public void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseManager.DatabaseException {
+                    public void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseException {
                         try (Cursor cursor = database.rawQuery(CommentModel.SELECTCOMMENTSPOST, new String[]{String.valueOf(postId)})) {
                             while (cursor.moveToNext()) {
                                 comments.add(CommentDb.COMMENTS_POST_MAPPER.map(cursor).asModel());
@@ -39,7 +40,7 @@ public class CommentDAO {
                         }
                     }
                 });
-            } catch (DatabaseManager.DatabaseException e) {
+            } catch (DatabaseException e) {
                 Log.e("Database", "Error in the database", e);
             }
         }
@@ -47,20 +48,20 @@ public class CommentDAO {
     }
 
     @WorkerThread
-    public void save(@NonNull final Comment comment) throws DatabaseManager.DatabaseException {
+    public void save(@NonNull final Comment comment) throws DatabaseException {
         mDatabaseManager.transaction(new DatabaseManager.Transaction() {
             @Override
-            public void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseManager.DatabaseException {
+            public void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseException {
                 database.insertWithOnConflict(CommentModel.TABLE_NAME, null, comment.marshal(), SQLiteDatabase.CONFLICT_REPLACE);
             }
         });
     }
 
     @WorkerThread
-    public void save(@NonNull final Post post, @NonNull final List<Comment> comments) throws DatabaseManager.DatabaseException {
+    public void save(@NonNull final Post post, @NonNull final List<Comment> comments) throws DatabaseException {
         mDatabaseManager.transaction(new DatabaseManager.Transaction() {
             @Override
-            public void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseManager.DatabaseException {
+            public void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseException {
                 //Could be more efficient by reusing the statement, but what the hell
                 for (Comment comment : comments) {
                     database.insertWithOnConflict(CommentModel.TABLE_NAME, null,
@@ -75,11 +76,11 @@ public class CommentDAO {
 
     @NonNull
     @WorkerThread
-    public List<Comment> commentsPendingToSync() throws DatabaseManager.DatabaseException {
+    public List<Comment> commentsPendingToSync() throws DatabaseException {
         final List<Comment> comments = new ArrayList<>();
         mDatabaseManager.transaction(new DatabaseManager.Transaction() {
             @Override
-            public void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseManager.DatabaseException {
+            public void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseException {
                 try (Cursor cursor = database.rawQuery(CommentModel.SELECTSYNCCOMMENTS, null)) {
                     while (cursor.moveToNext()) {
                         comments.add(CommentDb.SYNC_POSTS_MAPPER.map(cursor).asModel());
@@ -91,11 +92,11 @@ public class CommentDAO {
     }
 
     @WorkerThread
-    public void delete(@Nullable final Long commentId) throws DatabaseManager.DatabaseException {
+    public void delete(@Nullable final Long commentId) throws DatabaseException {
         if (commentId != null) {
             mDatabaseManager.transaction(new DatabaseManager.Transaction() {
                 @Override
-                public void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseManager.DatabaseException {
+                public void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseException {
                     database.execSQL(CommentModel.DELETECOMMENT, new Long[]{commentId});
                 }
             });
@@ -103,11 +104,11 @@ public class CommentDAO {
     }
 
     @WorkerThread
-    public void deleteFromPost(@Nullable final Post post) throws DatabaseManager.DatabaseException {
+    public void deleteFromPost(@Nullable final Post post) throws DatabaseException {
         if (post != null) {
             mDatabaseManager.transaction(new DatabaseManager.Transaction() {
                 @Override
-                public void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseManager.DatabaseException {
+                public void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseException {
                     database.execSQL(CommentModel.DELETECOMMENTSBYPOST, new Long[]{post.internalId()});
                 }
             });

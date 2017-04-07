@@ -58,14 +58,4 @@ public class DatabaseManager {
     public interface Transaction {
         void onTransaction(@NonNull SQLiteDatabase database) throws DatabaseException;
     }
-
-    public class DatabaseException extends Exception {
-        public DatabaseException(String detailMessage) {
-            super(detailMessage);
-        }
-
-        public DatabaseException(String detailMessage, Throwable throwable) {
-            super(detailMessage, throwable);
-        }
-    }
 }
