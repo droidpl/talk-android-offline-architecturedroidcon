@@ -10,6 +10,8 @@ import android.support.v4.content.Loader;
 
 import com.mobgen.droidcon.offline.DemosApplication;
 import com.mobgen.droidcon.offline.R;
+import com.mobgen.droidcon.offline.presentation.modules.postdetail.PostDetailContract;
+import com.mobgen.droidcon.offline.presentation.modules.postdetail.PostDetailPresenter;
 import com.mobgen.droidcon.offline.sdk.models.Comment;
 import com.mobgen.droidcon.offline.sdk.models.Post;
 import com.mobgen.droidcon.offline.sdk.repository.DataStore;
@@ -23,10 +25,12 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class OfflinePostDetailsActivity extends BasePostDetailsActivity
-        implements LoaderManager.LoaderCallbacks<List<Comment>> {
+        implements LoaderManager.LoaderCallbacks<List<Comment>>
+        , PostDetailContract.View {
 
     private Executor mExecutor;
     private DataStore mRepository;
+    private PostDetailContract.Presenter presenter;
 
     public static void start(@NonNull Context context, @NonNull Post post) {
         context.startActivity(getIntent(context, post, OfflinePostDetailsActivity.class));
@@ -35,10 +39,7 @@ public class OfflinePostDetailsActivity extends BasePostDetailsActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(R.string.title_offline_post_details);
-        mRepository = DemosApplication.instance().demoSdk();
-        mExecutor = Executors.newSingleThreadExecutor();
-        CommentLoader.init(getSupportLoaderManager(), this);
+        setUp();
     }
 
     @Override
@@ -66,31 +67,13 @@ public class OfflinePostDetailsActivity extends BasePostDetailsActivity
     @Override
     public void onCommentCreated(@NonNull final Comment comment) {
         startLoading();
-        mExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    mRepository.localCreate(comment);
-                } catch (RepositoryException e) {
-                    showError();
-                }
-            }
-        });
+        presenter.createComment(comment);
     }
 
     @Override
     public void onRemoveComment(@NonNull final Comment comment) {
         startLoading();
-        mExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    mRepository.localDelete(comment);
-                } catch (RepositoryException e) {
-                    showError();
-                }
-            }
-        });
+        presenter.deleteComment(comment);
     }
 
     public void showError() {
@@ -100,5 +83,21 @@ public class OfflinePostDetailsActivity extends BasePostDetailsActivity
                 Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_load_posts), Snackbar.LENGTH_LONG).show();
             }
         });
+    }
+
+    @Override
+    public void setUp() {
+
+        setTitle(R.string.title_offline_post_details);
+        mRepository = DemosApplication.instance().demoSdk();
+        mExecutor = Executors.newSingleThreadExecutor();
+        CommentLoader.init(getSupportLoaderManager(), this);
+
+        new PostDetailPresenter(this, mRepository, mExecutor);
+    }
+
+    @Override
+    public void setPresenter(PostDetailContract.Presenter presenter) {
+        this.presenter = presenter;
     }
 }
