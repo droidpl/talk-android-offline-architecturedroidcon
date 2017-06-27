@@ -4,18 +4,19 @@ import android.app.Application;
 import android.support.annotation.NonNull;
 
 import com.mobgen.droidcon.offline.sdk.DemoSdk;
+import com.mobgen.droidcon.offline.sdk.repository.DataStore;
 
 public class DemosApplication extends Application {
 
     private static DemosApplication sInstance;
-    private DemoSdk mDemoSdk;
+    private DataStore mDemoSdk;
 
     public static DemosApplication instance() {
         return sInstance;
     }
 
     @NonNull
-    public DemoSdk demoSdk() {
+    public DataStore demoSdk() {
         return mDemoSdk;
     }
 
@@ -23,6 +24,6 @@ public class DemosApplication extends Application {
     public void onCreate() {
         super.onCreate();
         sInstance = this;
-        mDemoSdk = DemoSdk.Factory.init(this);
+        mDemoSdk = DemoSdk.init(this);
     }
 }

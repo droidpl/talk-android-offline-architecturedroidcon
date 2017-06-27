@@ -12,19 +12,13 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".shared.ui.DemoSelectorActivity">
+
+        <activity android:name=".demos.offline.OfflinePostActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".demos.online.OnlinePostActivity" />
-
-        <activity android:name=".demos.online.OnlinePostDetailsActivity" />
-
-        <activity android:name=".demos.offline.OfflinePostActivity" />
 
         <activity android:name=".demos.offline.OfflinePostDetailsActivity" />
     </application>

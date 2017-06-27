@@ -20,7 +20,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public abstract class BasePostActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, NetworkMonitor.ConnectivityListener, View.OnClickListener, NewPostDialogFragment.NewPostListener, PostAdapter.PostListener {
+public abstract class BasePostActivity extends AppCompatActivity
+        implements SwipeRefreshLayout.OnRefreshListener,
+        NetworkMonitor.ConnectivityListener, View.OnClickListener,
+        NewPostDialogFragment.NewPostListener,
+        PostAdapter.PostListener {
 
     private static final String DIALOG_CREATE_TAG = "create_post_dialog";
 

@@ -1,6 +1,6 @@
 package com.mobgen.droidcon.offline.sdk.repository;
 
-public class RepositoryException extends Exception {
+public class RepositoryException extends RuntimeException {
     public RepositoryException(String detailMessage) {
         super(detailMessage);
     }

@@ -8,6 +8,7 @@ import android.support.v4.content.Loader;
 
 import com.mobgen.droidcon.offline.sdk.DemoSdk;
 import com.mobgen.droidcon.offline.sdk.models.Post;
+import com.mobgen.droidcon.offline.sdk.repository.DataStore;
 import com.mobgen.droidcon.offline.sdk.sync.SyncService;
 
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
 public class PostLoader extends BaseLoader<List<Post>> {
 
     private static final int POST_LOADER_ID = 1;
-    private DemoSdk mDemoSdk;
+    private DataStore mDemoSdk;
     private BroadcastReceiver mObserver;
 
     public static void init(@NonNull LoaderManager supportLoaderManager, @NonNull LoaderManager.LoaderCallbacks<List<Post>> callback) {
@@ -27,14 +28,14 @@ public class PostLoader extends BaseLoader<List<Post>> {
         return supportLoaderManager.getLoader(POST_LOADER_ID);
     }
 
-    public PostLoader(@NonNull Context context, DemoSdk demoSdk) {
+    public PostLoader(@NonNull Context context, DataStore demoSdk) {
         super(context);
         mDemoSdk = demoSdk;
     }
 
     @Override
     public List<Post> loadInBackground() {
-        setData(mDemoSdk.postRepository().posts());
+        setData(mDemoSdk.posts());
         return getData();
     }
 

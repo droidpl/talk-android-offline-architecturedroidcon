@@ -9,6 +9,7 @@ import android.support.v4.content.Loader;
 import com.mobgen.droidcon.offline.sdk.DemoSdk;
 import com.mobgen.droidcon.offline.sdk.models.Comment;
 import com.mobgen.droidcon.offline.sdk.models.Post;
+import com.mobgen.droidcon.offline.sdk.repository.DataStore;
 import com.mobgen.droidcon.offline.sdk.sync.SyncService;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
 public class CommentLoader extends BaseLoader<List<Comment>> {
 
     private static final int COMMENT_LOADER_ID = 1;
-    private DemoSdk mDemoSdk;
+    private DataStore mDemoSdk;
     private BroadcastReceiver mObserver;
     private Post mPost;
 
@@ -28,7 +29,7 @@ public class CommentLoader extends BaseLoader<List<Comment>> {
         return supportLoaderManager.getLoader(COMMENT_LOADER_ID);
     }
 
-    public CommentLoader(@NonNull Context context, @NonNull DemoSdk demoSdk, @NonNull Post post) {
+    public CommentLoader(@NonNull Context context, @NonNull DataStore demoSdk, @NonNull Post post) {
         super(context);
         mDemoSdk = demoSdk;
         mPost = post;
@@ -36,7 +37,7 @@ public class CommentLoader extends BaseLoader<List<Comment>> {
 
     @Override
     public List<Comment> loadInBackground() {
-        setData(mDemoSdk.postRepository().comments(mPost));
+        setData(mDemoSdk.comments(mPost));
         return getData();
     }
 
